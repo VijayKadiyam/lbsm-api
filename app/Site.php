@@ -25,4 +25,9 @@ class Site extends Model
   {
     return $this->hasMany(ProgramPost::class);
   }
+  
+  public function user_programs()
+  {
+    return $this->hasMany(UserProgram::class);
+  }
 }

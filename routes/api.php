@@ -55,3 +55,4 @@ Route::get('truncate_users', 'CrudeUsersController@truncate');
 
 Route::resource('programs', 'ProgramsController');
 Route::resource('program_posts', 'ProgramPostsController');
+Route::resource('user_programs', 'UserProgramsController');
