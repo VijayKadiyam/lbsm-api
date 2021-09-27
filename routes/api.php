@@ -58,3 +58,4 @@ Route::resource('program_posts', 'ProgramPostsController');
 Route::resource('user_programs', 'UserProgramsController');
 Route::resource('user_program_posts', 'UserProgramPostsController');
 Route::resource('program_tasks', 'ProgramTasksController');
+Route::resource('user_program_tasks', 'UserProgramTasksController');
