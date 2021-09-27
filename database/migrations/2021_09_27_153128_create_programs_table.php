@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostMediaRelationVisibilitiesTable extends Migration
+class CreateProgramsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,13 @@ class CreatePostMediaRelationVisibilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_media_relation_visibilities', function (Blueprint $table) {
+        Schema::create('programs', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('site_id');
+            $table->string('program_name', 100)->nullable();
+            $table->string('program_description')->nullable();
+            $table->string('instructor')->nullable();
+            $table->float('hours')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +31,6 @@ class CreatePostMediaRelationVisibilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_media_relation_visibilities');
+        Schema::dropIfExists('programs');
     }
 }
