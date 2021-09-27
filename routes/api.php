@@ -54,3 +54,4 @@ Route::get('truncate_users', 'CrudeUsersController@truncate');
 // Route::get('truncate_group_divisions', 'CrudGroupDivisionController@truncate');
 
 Route::resource('programs', 'ProgramsController');
+Route::resource('program_posts', 'ProgramPostsController');
