@@ -155,10 +155,68 @@ class UserProgramTaskTest extends TestCase
     //         ]);
     // }
 
-    /** @test */
-    function show_single_user_program_task()
-    {
+    // /** @test */
+    // function show_single_user_program_task()
+    // {
 
+    //     $this->json('get', "/api/user_program_tasks/1", [], $this->headers)
+    //         ->assertStatus(200)
+    //         ->assertJson([
+    //             'data'  => [
+    //                 'user_id' => 1,
+    //                 'program_id' => 1,
+    //                 'program_task_id' => 1,
+    //                 'marks_obtained' => 0,
+    //                 'is_completed' => 0,
+    //                 'completion_date' => 'completion_date',
+    //             ]
+    //         ]);
+    // }
+
+    // /** @test */
+    // function update_single_user_program_task()
+    // {
+    //     $payload = [
+    //         'user_id' => 1,
+    //         'program_id' => 1,
+    //         'program_task_id' => 1,
+    //         'marks_obtained' => 0,
+    //         'is_completed' => 0,
+    //         'completion_date' => 'completion_date',
+    //     ];
+
+    //     $this->json('patch', '/api/user_program_tasks/1', $payload, $this->headers)
+    //         ->assertStatus(200)
+    //         ->assertJson([
+    //             'data'    => [
+    //                 'user_id' => 1,
+    //                 'program_id' => 1,
+    //                 'program_task_id' => 1,
+    //                 'marks_obtained' => 0,
+    //                 'is_completed' => 0,
+    //                 'completion_date' => 'completion_date',
+    //             ]
+    //         ])
+    //         ->assertJsonStructureExact([
+    //             'data'  => [
+    //                 'id',
+    //                 'site_id',
+    //                 'user_id',
+    //                 'program_id',
+    //                 'program_task_id',
+    //                 'marks_obtained',
+    //                 'is_completed',
+    //                 'completion_date',
+    //                 'created_at',
+    //                 'updated_at',
+    //             ]
+    //         ]);
+    // }
+
+    /** @test */
+    function show_single_UserProgramTask()
+    {
+$this->disableEH();
         $this->json('get', "/api/user_program_tasks/1", [], $this->headers)
             ->assertStatus(200)
             ->assertJson([
@@ -174,27 +232,27 @@ class UserProgramTaskTest extends TestCase
     }
 
     /** @test */
-    function update_single_user_program_task()
+    function update_single_TaskTask()
     {
         $payload = [
-            'user_id' => 1,
-            'program_id' => 1,
-            'program_task_id' => 1,
-            'marks_obtained' => 0,
-            'is_completed' => 0,
-            'completion_date' => 'completion_date',
+            'user_id' => 2,
+            'program_id' => 2,
+            'program_task_id' => 2,
+            'marks_obtained' => 1,
+            'is_completed' => 1,
+            'completion_date' => 'completion_date Updated',
         ];
 
         $this->json('patch', '/api/user_program_tasks/1', $payload, $this->headers)
             ->assertStatus(200)
             ->assertJson([
                 'data'    => [
-                    'user_id' => 1,
-                    'program_id' => 1,
-                    'program_task_id' => 1,
-                    'marks_obtained' => 0,
-                    'is_completed' => 0,
-                    'completion_date' => 'completion_date',
+                    'user_id' => 2,
+                    'program_id' => 2,
+                    'program_task_id' => 2,
+                    'marks_obtained' => 1,
+                    'is_completed' => 1,
+                    'completion_date' => 'completion_date Updated',
                 ]
             ])
             ->assertJsonStructureExact([

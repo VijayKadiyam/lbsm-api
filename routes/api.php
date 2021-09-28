@@ -33,12 +33,17 @@ Route::resource('permission_role', 'PermissionRoleController');
 Route::resource('permission_user', 'PermissionUserController');
 
 Route::get('users/masters', 'UsersController@masters');
+Route::post('upload_user_image', 'UploadsController@uploadUserImage');
 Route::resource('users', 'UsersController');
 
 
 Route::resource('sites', 'SitesController');
 Route::resource('site_user', 'siteUserController');
 
+Route::resource('values', 'ValuesController');
+Route::get('value_lists/masters', 'ValueListsController@masters');
+Route::resource('values/{value}/value_lists', 'ValueListsController');
+Route::post('values/{value}/value_lists_multiple', 'ValueListsController@storeMultiple');
 
 // Upload Excell User
 Route::get('crude_users', 'CrudeUsersController@index');
@@ -59,4 +64,5 @@ Route::resource('user_programs', 'UserProgramsController');
 Route::resource('user_program_posts', 'UserProgramPostsController');
 Route::resource('program_tasks', 'ProgramTasksController');
 Route::resource('user_program_tasks', 'UserProgramTasksController');
+Route::post('upload_user_program_task_documents', 'UploadsController@uploadUserProgramTaskDocumentImage');
 Route::resource('user_program_task_documents', 'UserProgramTaskDocumentsController');

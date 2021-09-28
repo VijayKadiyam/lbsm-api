@@ -40,7 +40,7 @@ class Site extends Model
   {
     return $this->hasMany(ProgramTask::class);
   }
-  
+
   public function user_program_tasks()
   {
     return $this->hasMany(UserProgramTask::class);
@@ -49,5 +49,10 @@ class Site extends Model
   public function user_program_task_documents()
   {
     return $this->hasMany(UserProgramTaskDocument::class);
+  }
+
+  public function values()
+  {
+    return $this->hasMany(Value::class);
   }
 }

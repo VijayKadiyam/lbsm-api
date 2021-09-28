@@ -55,30 +55,26 @@ class UserProgramTasksController extends Controller
         ], 201);
     }
 
-    /*
-     * To view a single userprogramTask
-     *
-     *@
-     */
-    public function show(UserProgramTask $userprogramTask)
+
+    public function show(UserProgramTask $userProgramTask)
     {
         return response()->json([
-            'data'   =>  $userprogramTask,
+            'data'   =>  $userProgramTask,
             'success' =>  true
         ], 200);
     }
 
     /*
-     * To update a userprogramTask
+     * To update a userProgramTask$userProgramTaskDocument
      *
      *@
      */
-    public function update(Request $request, UserProgramTask $userprogramTask)
+    public function update(Request $request, UserProgramTask $userProgramTask)
     {
-        $userprogramTask->update($request->all());
+        $userProgramTask->update($request->all());
 
         return response()->json([
-            'data'  =>  $userprogramTask
+            'data'  =>  $userProgramTask
         ], 200);
     }
 

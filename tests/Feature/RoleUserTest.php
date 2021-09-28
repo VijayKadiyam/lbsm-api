@@ -68,8 +68,6 @@ class RoleUserTest extends TestCase
           'email',
           'api_token',
           'active',
-          'relation_id',
-          'relation_with_id',
           'image_path',
           'created_at',
           'updated_at',
