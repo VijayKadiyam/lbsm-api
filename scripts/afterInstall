@@ -4,5 +4,6 @@ cd /var/www/vhosts/lbsm/lbsm-api
 
 npm run build
 
+
 # pm2 delete ff-client 
 # pm2 start npm --name ff-client -- start
