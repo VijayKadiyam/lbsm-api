@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /var/www/vhosts/hrsathi/hrsathi-api
+cd /var/www/vhosts/lbsm/lbsm-api
 
 php /usr/local/bin/composer install
 
