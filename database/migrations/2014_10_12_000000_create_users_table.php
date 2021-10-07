@@ -25,8 +25,6 @@ class CreateUsersTable extends Migration
             $table->string('api_token', 60)->unique()->nullable();
             $table->integer('active')->default(0);
             $table->string('password');
-            $table->integer('relation_id')->nullable();
-            $table->integer('relation_with_id')->nullable();
             $table->string('image_path', 100)->nullable();
             $table->rememberToken();
             $table->timestamps();

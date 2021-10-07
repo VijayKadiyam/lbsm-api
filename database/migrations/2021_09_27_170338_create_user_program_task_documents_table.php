@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostRelationVisibilitiesTable extends Migration
+class CreateUserProgramTaskDocumentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreatePostRelationVisibilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_relation_visibilities', function (Blueprint $table) {
+        Schema::create('user_program_task_documents', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('post_id');
-            $table->integer('relation_id');
+            $table->integer('site_id');
+            $table->integer('user_program_task_id')->nullable();
+            $table->string('document_path')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreatePostRelationVisibilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_relation_visibilities');
+        Schema::dropIfExists('user_program_task_documents');
     }
 }

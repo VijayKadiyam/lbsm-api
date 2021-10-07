@@ -8,6 +8,7 @@ use App\User;
 use App\Product;
 use App\Group;
 use App\GroupDivision;
+use App\UserProgramTaskDocument;
 
 class UploadsController extends Controller
 {
@@ -80,34 +81,34 @@ class UploadsController extends Controller
     ]);
   }
 
-  public function uploadGroupImage(Request $request)
+  public function uploadUserProgramTaskDocumentImage(Request $request)
   {
     $request->validate([
       'id'        => 'required',
     ]);
 
-    $imagePath = '';
-    if ($request->hasFile('logo_path')) {
-      $file = $request->file('logo_path');
+    $documentImagePath = '';
+    if ($request->hasFile('document_path')) {
+      $file = $request->file('document_path');
       $name = $request->filename ?? 'photo.';
       $name = $name . $file->getClientOriginalExtension();;
-      $imagePath = 'group/' .  $request->id . '/' . $name;
-      Storage::disk('local')->put($imagePath, file_get_contents($file), 'public');
+      $documentImagePath = 'user-program-task-documents/' .  $request->id . '/' . $name;
+      Storage::disk('local')->put($documentImagePath, file_get_contents($file), 'public');
 
-      $group = Group::where('id', '=', request()->id)->first();
-      $group->logo_path = $imagePath;
+      $group = UserProgramTaskDocument::where('id', '=', request()->id)->first();
+      $group->document_path = $documentImagePath;
       $group->update();
 
       return response()->json([
         'data'  =>  $group,
-        'message' =>  "Group Image upload Successfully",
+        'message' =>  "User Program Task Document Image upload Successfully",
         'success' =>  true
       ], 200);
     }
 
     return response()->json([
       'data'  => [
-        'image_path'  =>  $imagePath
+        'image_path'  =>  $documentImagePath
       ],
       'success' =>  true
     ]);
