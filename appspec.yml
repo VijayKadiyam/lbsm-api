@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/www/vhosts/lbsm/lbsm-client
+    destination: /var/www/vhosts/lbsm/lbsm-api
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies

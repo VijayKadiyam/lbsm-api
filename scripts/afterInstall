@@ -1,6 +1,6 @@
 #!/bin/bash
 export PATH="$PATH:"/usr/local/bin/
-cd /var/www/vhosts/lbsm/lbsm-client
+cd /var/www/vhosts/lbsm/lbsm-api
 
 npm run build
 
