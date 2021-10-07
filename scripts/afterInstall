@@ -1,9 +1,13 @@
 #!/bin/bash
-export PATH="$PATH:"/usr/local/bin/
 cd /var/www/vhosts/lbsm/lbsm-api
 
-npm run build
+php /usr/local/bin/composer install
 
+sudo chmod -R 777 storage public vendor bootstrap database
 
-# pm2 delete ff-client 
-# pm2 start npm --name ff-client -- start
+php /usr/local/bin/composer dump-autoload
+php artisan cache:clear
+
+php artisan migrate
+
+php artisan config:clear
