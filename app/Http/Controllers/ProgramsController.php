@@ -15,21 +15,8 @@ class ProgramsController extends Controller
     public function index(Request $request)
     {
         $count = 0;
-        if ($request->search) {
-            $programs = request()->site->programs()
-                ->where('program_name', 'LIKE', '%' . $request->search . '%')
-                ->get();
-            $count = $programs->count();
-        } else if (request()->page && request()->rowsPerPage) {
-            $programs = request()->site->programs();
-            $count = $programs->count();
-            $programs = $programs->paginate(request()->rowsPerPage)->toArray();
-            $programs = $programs['data'];
-        } else {
             $programs = request()->site->programs;
             $count = $programs->count();
-        }
-
         return response()->json([
             'data'     =>  $programs,
             'count'    =>   $count

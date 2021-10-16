@@ -16,4 +16,10 @@ class Program extends Model
     public function site() {
         return $this->belongsTo(Site::class);
     }
+    
+    public function program_tasks()
+    {
+        return $this->hasMany(ProgramTask::class)
+        ->with('program');
+    }
 }
