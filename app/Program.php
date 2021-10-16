@@ -13,13 +13,22 @@ class Program extends Model
         'hours',
     ];
 
-    public function site() {
+    public function site()
+    {
         return $this->belongsTo(Site::class);
     }
-    
+
     public function program_tasks()
     {
         return $this->hasMany(ProgramTask::class)
-        ->with('program');
+            ->with('program');
+    }
+    public function user_programs()
+    {
+        return $this->hasMany(UserProgram::class);
+    }
+    public function user_program_tasks()
+    {
+        return $this->hasMany(UserProgramTask::class);
     }
 }

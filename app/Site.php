@@ -28,7 +28,8 @@ class Site extends Model
   
   public function user_programs()
   {
-    return $this->hasMany(UserProgram::class);
+    return $this->hasMany(UserProgram::class)
+    ->with('user','program');
   }
   
   public function user_program_posts()
