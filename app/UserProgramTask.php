@@ -18,4 +18,16 @@ class UserProgramTask extends Model
     {
         return $this->belongsTo(Site::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
+    }
+    public function user_program()
+    {
+        return $this->belongsTo(UserProgram::class);
+    }
 }

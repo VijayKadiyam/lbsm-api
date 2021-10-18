@@ -24,4 +24,9 @@ class UserProgram extends Model
     {
         return $this->belongsTo(Program::class);
     }
+    // public function user_program_tasks()
+    // {
+    //     return $this->hasMany(UserProgramTask::class)
+    //     ->with('user','program');
+    // }
 }

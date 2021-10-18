@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Program;
+use App\UserProgram;
 use App\UserProgramTask;
 use Illuminate\Http\Request;
 
@@ -12,23 +14,12 @@ class UserProgramTasksController extends Controller
         $this->middleware(['site']);
     }
 
-    public function index(Request $request)
+    public function index(UserProgram $userProgram)
     {
         $count = 0;
-        if ($request->search) {
-            $user_program_tasks = request()->site->user_program_tasks()
-                ->where('serial_no', 'LIKE', '%' . $request->search . '%')
-                ->get();
-            $count = $user_program_tasks->count();
-        } else if (request()->page && request()->rowsPerPage) {
-            $user_program_tasks = request()->site->user_program_tasks();
-            $count = $user_program_tasks->count();
-            $user_program_tasks = $user_program_tasks->paginate(request()->rowsPerPage)->toArray();
-            $user_program_tasks = $user_program_tasks['data'];
-        } else {
-            $user_program_tasks = request()->site->user_program_tasks;
-            $count = $user_program_tasks->count();
-        }
+        $user_program_tasks = $userProgram->user_program_tasks;
+        // return $userProgram;
+        // $count = $user_program_tasks->count();
 
         return response()->json([
             'data'     =>  $user_program_tasks,
@@ -41,14 +32,14 @@ class UserProgramTasksController extends Controller
      *
      *@
      */
-    public function store(Request $request)
+    public function store(Request $request, UserProgram $userProgram)
     {
         $request->validate([
             'program_id'        =>  'required',
         ]);
 
         $userprogramTask = new UserProgramTask(request()->all());
-        $request->site->user_program_tasks()->save($userprogramTask);
+        $userProgram->user_program_tasks()->save($userprogramTask);
 
         return response()->json([
             'data'    =>  $userprogramTask
@@ -56,8 +47,11 @@ class UserProgramTasksController extends Controller
     }
 
 
-    public function show(UserProgramTask $userProgramTask)
+    public function show(UserProgram $userProgram, UserProgramTask $userProgramTask)
     {
+        $userProgramTask->userProgram = $userProgram;
+        $userProgramTask->user = $userProgramTask->user;
+        $userProgramTask->program = $userProgramTask->program;
         return response()->json([
             'data'   =>  $userProgramTask,
             'success' =>  true
