@@ -258,5 +258,9 @@ class User extends Authenticatable
   {
     return $this->hasMany(UserProgram::class);
   }
+  public function user_program_posts()
+  {
+    return $this->hasMany(UserProgramPost::class);
+  }
 
 }
