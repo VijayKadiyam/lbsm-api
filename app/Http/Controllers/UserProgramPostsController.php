@@ -20,13 +20,13 @@ class UserProgramPostsController extends Controller
         $ProgramsController = new ProgramsController();
         $ProgramsResponse = $ProgramsController->index($request);
 
-        $ProgramPostsController = new ProgramPostsController();
-        $ProgramPostsResponse = $ProgramPostsController->index($request);
+        // $ProgramPostsController = new ProgramPostsController();
+        // $ProgramPostsResponse = $ProgramPostsController->index($request);
 
         return response()->json([
             'users'  =>  $UsersResponse->getData()->data,
             'programs'      =>  $ProgramsResponse->getData()->data,
-            'program_posts'      =>  $ProgramPostsResponse->getData()->data,
+            'program_posts'      =>  $ProgramsResponse->getData()->data,
         ], 200);
     }
     public function index(Request $request)
