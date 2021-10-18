@@ -42,8 +42,8 @@ Route::resource('site_user', 'siteUserController');
 
 Route::resource('values', 'ValuesController');
 Route::get('value_lists/masters', 'ValueListsController@masters');
-Route::resource('values/{value}/value_lists', 'ValueListsController');
 Route::post('values/{value}/value_lists_multiple', 'ValueListsController@storeMultiple');
+Route::resource('values/{value}/value_lists', 'ValueListsController');
 
 // Upload Excell User
 Route::get('crude_users', 'CrudeUsersController@index');
@@ -59,6 +59,9 @@ Route::get('truncate_users', 'CrudeUsersController@truncate');
 // Route::get('truncate_group_divisions', 'CrudGroupDivisionController@truncate');
 
 Route::resource('programs', 'ProgramsController');
+Route::get('program_posts/masters', 'ProgramPostsController@masters');
+Route::post('programs/{program}/program_post_multiple', 'ProgramPostsController@storeMultiple');
+Route::resource('programs/{program}/program_posts', 'ProgramPostsController');
 Route::resource('program_posts', 'ProgramPostsController');
 
 Route::get('user_programs/masters', 'UserProgramsController@masters');

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Program;
 use App\ProgramPost;
+use App\Value;
+use App\ValueList;
 use Illuminate\Http\Request;
 
 class ProgramPostsController extends Controller
@@ -10,6 +13,22 @@ class ProgramPostsController extends Controller
     public function __construct()
     {
         $this->middleware(['site']);
+    }
+
+    public function masters(Request $request)
+    {
+        $programsController = new ProgramsController();
+        $programsResponse = $programsController->index($request);
+
+        $post = Value::where('name', '=', 'POST')->first();
+
+        $posts = ValueList::where('value_id', '=', $post->id)
+            ->get();
+
+        return response()->json([
+            'programs'  =>  $programsResponse->getData()->data,
+            'posts' => $posts,
+        ], 200);
     }
 
     public function index(Request $request)
@@ -52,6 +71,31 @@ class ProgramPostsController extends Controller
 
         return response()->json([
             'data'    =>  $programPost
+        ], 201);
+    }
+
+    public function storeMultiple(Request $request, Program $program)
+    {
+        $request->validate([
+            'datas.*.program_id'    =>  'required',
+            'datas.*.site_id'     =>  'required',
+        ]);
+
+        $programPosts = [];
+        foreach ($request->datas as $programPost) {
+            if (!isset($programPost['id'])) {
+                $programPost = new ProgramPost($programPost);
+                $program->value_lists()->save($programPost);
+                $programPosts[] = $programPost;
+            } else {
+                $pp = ProgramPost::find($programPost['id']);
+                $pp->update($programPost);
+                $programPosts[] = $pp;
+            }
+        }
+
+        return response()->json([
+            'data'    =>  $programPosts
         ], 201);
     }
 
