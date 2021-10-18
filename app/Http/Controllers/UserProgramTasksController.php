@@ -52,6 +52,7 @@ class UserProgramTasksController extends Controller
         $userProgramTask->userProgram = $userProgram;
         $userProgramTask->user = $userProgramTask->user;
         $userProgramTask->program = $userProgramTask->program;
+        $userProgramTask->program_task = $userProgramTask->program_task;
         return response()->json([
             'data'   =>  $userProgramTask,
             'success' =>  true
@@ -63,7 +64,7 @@ class UserProgramTasksController extends Controller
      *
      *@
      */
-    public function update(Request $request, UserProgramTask $userProgramTask)
+    public function update(Request $request, UserProgram $userProgram, UserProgramTask $userProgramTask)
     {
         $userProgramTask->update($request->all());
 
