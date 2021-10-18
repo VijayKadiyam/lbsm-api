@@ -31,43 +31,35 @@ class ProgramPostsController extends Controller
         ], 200);
     }
 
-    public function index(Request $request)
+    public function index(Request $request, Program $program)
     {
         $count = 0;
-        if ($request->search) {
-            $program_posts = request()->site->program_posts()
-                ->where('serial_no', 'LIKE', '%' . $request->search . '%')
-                ->get();
-            $count = $program_posts->count();
-        } else if (request()->page && request()->rowsPerPage) {
-            $program_posts = request()->site->program_posts();
-            $count = $program_posts->count();
-            $program_posts = $program_posts->paginate(request()->rowsPerPage)->toArray();
-            $program_posts = $program_posts['data'];
+        $programPosts = $program->program_posts();
+        $programPosts = $request->showOnlyActive ? $programPosts->where('is_active', '=', 1) : $programPosts;
+        if (request()->page && request()->rowsPerPage) {
+            $count = $programPosts->count();
+            $programPosts = $programPosts->paginate(request()->rowsPerPage)->toArray();
+            $programPosts = $programPosts['data'];
         } else {
-            $program_posts = request()->site->program_posts;
-            $count = $program_posts->count();
+            $programPosts = $programPosts->get();
+            $count = $programPosts->count();
         }
 
         return response()->json([
-            'data'     =>  $program_posts,
+            'data'     =>   $programPosts,
             'count'    =>   $count
         ], 200);
     }
 
-    /*
-     * To store a new programPost
-     *
-     *@
-     */
-    public function store(Request $request)
+    public function store(Request $request, Program $program)
     {
         $request->validate([
-            'program_id'        =>  'required',
+            'program_id'    =>  'required',
+            'site_id'     =>  'required',
         ]);
 
         $programPost = new ProgramPost(request()->all());
-        $request->site->program_posts()->save($programPost);
+        $program->program_posts()->save($programPost);
 
         return response()->json([
             'data'    =>  $programPost
@@ -85,7 +77,7 @@ class ProgramPostsController extends Controller
         foreach ($request->datas as $programPost) {
             if (!isset($programPost['id'])) {
                 $programPost = new ProgramPost($programPost);
-                $program->value_lists()->save($programPost);
+                $program->program_posts()->save($programPost);
                 $programPosts[] = $programPost;
             } else {
                 $pp = ProgramPost::find($programPost['id']);
@@ -99,12 +91,7 @@ class ProgramPostsController extends Controller
         ], 201);
     }
 
-    /*
-     * To view a single programPost
-     *
-     *@
-     */
-    public function show(ProgramPost $programPost)
+    public function show(Program $program, ProgramPost $programPost)
     {
         return response()->json([
             'data'   =>  $programPost,
@@ -112,12 +99,7 @@ class ProgramPostsController extends Controller
         ], 200);
     }
 
-    /*
-     * To update a programPost
-     *
-     *@
-     */
-    public function update(Request $request, ProgramPost $programPost)
+    public function update(Request $request, Program $program, ProgramPost $programPost)
     {
         $programPost->update($request->all());
 
@@ -126,7 +108,7 @@ class ProgramPostsController extends Controller
         ], 200);
     }
 
-    public function destroy($id)
+    public function destroy(Program $program, $id)
     {
         $programPost = ProgramPost::find($id);
         $programPost->delete();

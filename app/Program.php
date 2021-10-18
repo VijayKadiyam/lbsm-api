@@ -31,4 +31,15 @@ class Program extends Model
     {
         return $this->hasMany(UserProgramTask::class);
     }
+
+    public function program_posts()
+  {
+    return $this->hasMany(ProgramPost::class);
+  }
+
+  public function active_program_posts()
+  {
+    return $this->hasMany(ProgramPost::class)
+      ->where('is_active', '=', 1);
+  }
 }

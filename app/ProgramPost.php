@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProgramPost extends Model
 {
     protected $fillable = [
+        'site_id',
         'program_id',
         'serial_no',
         'post_id',
@@ -15,4 +16,8 @@ class ProgramPost extends Model
     public function site() {
         return $this->belongsTo(Site::class);
     }
+    public function program()
+  {
+    return $this->belongsTo(Program::class);
+  }
 }

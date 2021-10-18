@@ -60,9 +60,9 @@ Route::get('truncate_users', 'CrudeUsersController@truncate');
 
 Route::resource('programs', 'ProgramsController');
 Route::get('program_posts/masters', 'ProgramPostsController@masters');
-Route::post('programs/{program}/program_post_multiple', 'ProgramPostsController@storeMultiple');
+Route::post('programs/{program}/program_posts_multiple', 'ProgramPostsController@storeMultiple');
 Route::resource('programs/{program}/program_posts', 'ProgramPostsController');
-Route::resource('program_posts', 'ProgramPostsController');
+// Route::resource('program_posts', 'ProgramPostsController');
 
 Route::get('user_programs/masters', 'UserProgramsController@masters');
 Route::resource('user_programs', 'UserProgramsController');
