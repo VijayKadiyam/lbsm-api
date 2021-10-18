@@ -10,10 +10,22 @@ class UserProgramPost extends Model
         'user_id',
         'program_id',
         'program_post_id',
-        'promote_date',
+        'promotion_date',
+        'remarks',
     ];
 
     public function site() {
         return $this->belongsTo(Site::class);
     }
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+    public function program() {
+        return $this->belongsTo(Program::class);
+    }
+    public function program_post() {
+        return $this->belongsTo(ProgramPost::class);
+    }
+
+
 }
