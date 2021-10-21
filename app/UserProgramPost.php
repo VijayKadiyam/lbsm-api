@@ -24,7 +24,8 @@ class UserProgramPost extends Model
         return $this->belongsTo(Program::class);
     }
     public function program_post() {
-        return $this->belongsTo(ProgramPost::class);
+        return $this->belongsTo(ProgramPost::class)
+        ->with('post');
     }
 
 

@@ -81,6 +81,7 @@ class UserProgramPostsController extends Controller
     {
         $userProgramPost->user = $userProgramPost->user;
         $userProgramPost->program = $userProgramPost->program;
+        $userProgramPost->program_post = $userProgramPost->program_post;
         return response()->json([
             'data'   =>  $userProgramPost,
             'success' =>  true
