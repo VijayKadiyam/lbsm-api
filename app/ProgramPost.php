@@ -20,4 +20,8 @@ class ProgramPost extends Model
   {
     return $this->belongsTo(Program::class);
   }
+  public function post()
+    {
+      return $this->belongsTo(ValueList::class, 'post_id');
+    }   
 }

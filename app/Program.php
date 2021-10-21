@@ -39,8 +39,10 @@ class Program extends Model
 
     public function program_posts()
   {
-    return $this->hasMany(ProgramPost::class);
+    return $this->hasMany(ProgramPost::class)
+    ->with('post');
   }
+  
 
   public function active_program_posts()
   {
