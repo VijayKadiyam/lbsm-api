@@ -35,7 +35,7 @@ class Site extends Model
   public function user_program_posts()
   {
     return $this->hasMany(UserProgramPost::class)
-    ->with('user','program');
+    ->with('user','program','program_post');
   }
 
   public function program_tasks()
