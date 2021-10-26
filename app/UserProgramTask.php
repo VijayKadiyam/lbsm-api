@@ -15,6 +15,10 @@ class UserProgramTask extends Model
         'is_completed',
         'completion_date',
         'user_program_id',
+        'imagepath1',
+        'imagepath2',
+        'imagepath3',
+        'imagepath4',
     ];
     public function site()
     {
