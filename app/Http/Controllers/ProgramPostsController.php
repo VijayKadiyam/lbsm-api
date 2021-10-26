@@ -12,6 +12,16 @@ class ProgramPostsController extends Controller
         $this->middleware(['site']);
     }
 
+    public function masters(Request $request) {
+        $programsController = new ProgramsController();
+        $programsResponse = $programsController->index($request);
+
+        return response()->json([
+            'programs'  =>  $programsResponse->getData()->data,
+            'posts'     =>  [],
+        ], 200);
+    }
+
     public function index(Request $request)
     {
         $count = 0;
