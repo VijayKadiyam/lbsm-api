@@ -12,7 +12,21 @@ class UserProgram extends Model
         'enrollment_date',
     ];
 
-    public function site(){
+    public function site()
+    {
         return $this->belongsTo(Site::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
+    }
+    public function user_program_tasks()
+    {
+        return $this->hasMany(UserProgramTask::class)
+        ->with('user','program','program_task','user_program');
     }
 }

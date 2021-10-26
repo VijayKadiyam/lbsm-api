@@ -42,8 +42,8 @@ Route::resource('site_user', 'siteUserController');
 
 Route::resource('values', 'ValuesController');
 Route::get('value_lists/masters', 'ValueListsController@masters');
-Route::resource('values/{value}/value_lists', 'ValueListsController');
 Route::post('values/{value}/value_lists_multiple', 'ValueListsController@storeMultiple');
+Route::resource('values/{value}/value_lists', 'ValueListsController');
 
 // Upload Excell User
 Route::get('crude_users', 'CrudeUsersController@index');
@@ -60,10 +60,19 @@ Route::get('truncate_users', 'CrudeUsersController@truncate');
 
 Route::resource('programs', 'ProgramsController');
 Route::get('program_posts/masters', 'ProgramPostsController@masters');
-Route::resource('program_posts', 'ProgramPostsController');
+Route::post('programs/{program}/program_posts_multiple', 'ProgramPostsController@storeMultiple');
+Route::resource('programs/{program}/program_posts', 'ProgramPostsController');
+// Route::resource('program_posts', 'ProgramPostsController');
+
+Route::get('user_programs/masters', 'UserProgramsController@masters');
 Route::resource('user_programs', 'UserProgramsController');
+
+Route::get('user_program_posts/masters', 'UserProgramPostsController@masters');
 Route::resource('user_program_posts', 'UserProgramPostsController');
+Route::resource('programs/{program}/program_tasks', 'ProgramTasksController');
+
 Route::resource('program_tasks', 'ProgramTasksController');
+Route::resource('user_programs/{user_program}/user_program_tasks', 'UserProgramTasksController');
 Route::resource('user_program_tasks', 'UserProgramTasksController');
 Route::post('upload_user_program_task_documents', 'UploadsController@uploadUserProgramTaskDocumentImage');
 Route::resource('user_program_task_documents', 'UserProgramTaskDocumentsController');

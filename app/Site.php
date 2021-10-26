@@ -28,17 +28,20 @@ class Site extends Model
   
   public function user_programs()
   {
-    return $this->hasMany(UserProgram::class);
+    return $this->hasMany(UserProgram::class)
+    ->with('user','program');
   }
   
   public function user_program_posts()
   {
-    return $this->hasMany(UserProgramPost::class);
+    return $this->hasMany(UserProgramPost::class)
+    ->with('user','program','program_post');
   }
 
   public function program_tasks()
   {
-    return $this->hasMany(ProgramTask::class);
+    return $this->hasMany(ProgramTask::class)
+    ->with('program');
   }
 
   public function user_program_tasks()

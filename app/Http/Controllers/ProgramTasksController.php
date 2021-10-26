@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Program;
 use App\ProgramTask;
 use Illuminate\Http\Request;
 
@@ -12,23 +13,11 @@ class ProgramTasksController extends Controller
         $this->middleware(['site']);
     }
 
-    public function index(Request $request)
+    public function index(Program $program)
     {
         $count = 0;
-        if ($request->search) {
-            $program_tasks = request()->site->program_tasks()
-                ->where('serial_no', 'LIKE', '%' . $request->search . '%')
-                ->get();
-            $count = $program_tasks->count();
-        } else if (request()->page && request()->rowsPerPage) {
-            $program_tasks = request()->site->program_tasks();
-            $count = $program_tasks->count();
-            $program_tasks = $program_tasks->paginate(request()->rowsPerPage)->toArray();
-            $program_tasks = $program_tasks['data'];
-        } else {
-            $program_tasks = request()->site->program_tasks;
-            $count = $program_tasks->count();
-        }
+        $program_tasks = $program->program_tasks;
+        $count = $program_tasks->count();
 
         return response()->json([
             'data'     =>  $program_tasks,
@@ -41,14 +30,14 @@ class ProgramTasksController extends Controller
      *
      *@
      */
-    public function store(Request $request)
+    public function store(Request $request, Program $program)
     {
         $request->validate([
             'program_id'        =>  'required',
         ]);
 
         $programTask = new ProgramTask(request()->all());
-        $request->site->program_tasks()->save($programTask);
+        $program->program_tasks()->save($programTask);
 
         return response()->json([
             'data'    =>  $programTask
@@ -60,8 +49,9 @@ class ProgramTasksController extends Controller
      *
      *@
      */
-    public function show(ProgramTask $programTask)
+    public function show(Program $program, ProgramTask $programTask)
     {
+        $programTask->program = $program;
         return response()->json([
             'data'   =>  $programTask,
             'success' =>  true
@@ -73,7 +63,7 @@ class ProgramTasksController extends Controller
      *
      *@
      */
-    public function update(Request $request, ProgramTask $programTask)
+    public function update(Request $request, Program $program,  ProgramTask $programTask)
     {
         $programTask->update($request->all());
 

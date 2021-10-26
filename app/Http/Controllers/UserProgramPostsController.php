@@ -12,6 +12,23 @@ class UserProgramPostsController extends Controller
         $this->middleware(['site']);
     }
 
+    public function masters(Request $request)
+    {
+        $UsersController = new UsersController();
+        $UsersResponse = $UsersController->index($request);
+
+        $ProgramsController = new ProgramsController();
+        $ProgramsResponse = $ProgramsController->index($request);
+
+        // $ProgramPostsController = new ProgramPostsController();
+        // $ProgramPostsResponse = $ProgramPostsController->index($request);
+
+        return response()->json([
+            'users'  =>  $UsersResponse->getData()->data,
+            'programs'      =>  $ProgramsResponse->getData()->data,
+            'program_posts'      =>  $ProgramsResponse->getData()->data,
+        ], 200);
+    }
     public function index(Request $request)
     {
         $count = 0;
@@ -62,6 +79,9 @@ class UserProgramPostsController extends Controller
      */
     public function show(UserProgramPost $userProgramPost)
     {
+        $userProgramPost->user = $userProgramPost->user;
+        $userProgramPost->program = $userProgramPost->program;
+        $userProgramPost->program_post = $userProgramPost->program_post;
         return response()->json([
             'data'   =>  $userProgramPost,
             'success' =>  true

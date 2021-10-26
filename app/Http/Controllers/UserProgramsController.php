@@ -12,6 +12,19 @@ class UserProgramsController extends Controller
         $this->middleware(['site']);
     }
 
+    public function masters(Request $request)
+    {
+        $UsersController = new UsersController();
+        $UsersResponse = $UsersController->index($request);
+
+        $ProgramsController = new ProgramsController();
+        $ProgramsResponse = $ProgramsController->index($request);
+
+        return response()->json([
+            'users'  =>  $UsersResponse->getData()->data,
+            'programs'      =>  $ProgramsResponse->getData()->data,
+        ], 200);
+    }
     public function index(Request $request)
     {
         $count = 0;
@@ -62,6 +75,8 @@ class UserProgramsController extends Controller
      */
     public function show(UserProgram $userProgram)
     {
+        $userProgram->user=$userProgram->user;
+        $userProgram->program=$userProgram->program;
         return response()->json([
             'data'   =>  $userProgram,
             'success' =>  true
