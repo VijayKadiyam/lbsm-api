@@ -96,12 +96,6 @@ class UploadsController extends Controller
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
       $userProgramTask->imagepath1 = $imagePath1;
       $userProgramTask->update();
-
-      return response()->json([
-        'data'  =>  $userProgramTask,
-        'message' =>  "User Program Task Image1 upload Successfully",
-        'success' =>  true
-      ], 200);
     }
 
     $imagePath2 = '';
@@ -115,12 +109,6 @@ class UploadsController extends Controller
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
       $userProgramTask->imagepath2 = $imagePath2;
       $userProgramTask->update();
-
-      return response()->json([
-        'data'  =>  $userProgramTask,
-        'message' =>  "User Program Task Image2 upload Successfully",
-        'success' =>  true
-      ], 200);
     }
 
     $imagePath3 = '';
@@ -135,11 +123,6 @@ class UploadsController extends Controller
       $userProgramTask->imagepath3 = $imagePath3;
       $userProgramTask->update();
 
-      return response()->json([
-        'data'  =>  $userProgramTask,
-        'message' =>  "User Program Task Image3 upload Successfully",
-        'success' =>  true
-      ], 200);
     }
 
     $imagePath4 = '';
@@ -154,11 +137,6 @@ class UploadsController extends Controller
       $userProgramTask->imagepath4 = $imagePath4;
       $userProgramTask->update();
 
-      return response()->json([
-        'data'  =>  $userProgramTask,
-        'message' =>  "User Program Task Image4 upload Successfully",
-        'success' =>  true
-      ], 200);
     }
 
     return response()->json([
