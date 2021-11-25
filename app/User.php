@@ -28,6 +28,9 @@ class User extends Authenticatable
     'image_path',
     'relation_id',
     'relation_with_id',
+    'nationality',
+    'rank',
+    'unique_id'
   ];
 
   /**
@@ -262,5 +265,4 @@ class User extends Authenticatable
   {
     return $this->hasMany(UserProgramPost::class);
   }
-
 }
