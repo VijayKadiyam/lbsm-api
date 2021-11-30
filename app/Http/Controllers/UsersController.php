@@ -197,6 +197,7 @@ class UsersController extends Controller
     $users = $users = $request->site->users()->with('roles')
     ->whereHas('roles',  function ($q) {
       $q->where('name', '!=', 'Admin');
+      $q->where('name', '!=', 'Main Admin');
     })->latest()->get();
     // if ($request->search == 'all')
     //   $users = $request->site->users()->with('roles')

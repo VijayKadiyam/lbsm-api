@@ -22,8 +22,10 @@ class ProgramPostsController extends Controller
 
         $post = Value::where('name', '=', 'POST')->first();
 
-        $posts = ValueList::where('value_id', '=', $post->id)
-            ->get();
+        $posts = [];
+        if($post)
+            $posts = ValueList::where('value_id', '=', $post->id)
+                ->get();
 
         return response()->json([
             'programs'  =>  $programsResponse->getData()->data,

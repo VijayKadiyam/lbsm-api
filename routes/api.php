@@ -31,6 +31,8 @@ Route::resource('role_user', 'RoleUserController');
 Route::resource('permissions', 'PermissionsController');
 Route::resource('permission_role', 'PermissionRoleController');
 Route::resource('permission_user', 'PermissionUserController');
+Route::resource('assign_permissions', 'AssignPermissionsController');
+Route::resource('unassign_permissions', 'UnAssignPermissionsController');
 
 Route::get('users/masters', 'UsersController@masters');
 Route::post('upload_user_image', 'UploadsController@uploadUserImage');
