@@ -73,6 +73,8 @@ class CrudeUsersController extends Controller
                 // Insert New User 
                 $user_data = new User($data);
                 request()->site->users()->save($user_data);
+                $user_data->assignRole(4);
+                $user_data->assignSite(1);
             }
             $user_id = $user_data['id'];
 
