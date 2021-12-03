@@ -19,6 +19,7 @@ class UserProgramTask extends Model
         'imagepath2',
         'imagepath3',
         'imagepath4',
+        'ship_id'
     ];
     public function site()
     {
@@ -39,5 +40,9 @@ class UserProgramTask extends Model
     public function user_program()
     {
         return $this->belongsTo(UserProgram::class);
+    }
+    public function ship()
+    {
+        return $this->belongsTo(ValueList::class);
     }
 }
