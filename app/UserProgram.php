@@ -27,6 +27,6 @@ class UserProgram extends Model
     public function user_program_tasks()
     {
         return $this->hasMany(UserProgramTask::class)
-        ->with('user','program','program_task','user_program');
+            ->with('user', 'program', 'program_task', 'user_program', 'ship');
     }
 }

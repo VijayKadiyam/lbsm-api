@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Program;
 use App\UserProgram;
 use App\UserProgramTask;
+use App\Value;
 use Illuminate\Http\Request;
 
 class UserProgramTasksController extends Controller
@@ -12,6 +13,20 @@ class UserProgramTasksController extends Controller
     public function __construct()
     {
         $this->middleware(['site']);
+    }
+
+    public function masters(Request $request)
+    {
+        $shipValue = Value::where('name', '=', 'SHIPS')
+            ->where('site_id', '=', $request->site->id)
+            ->first();
+        $ships = [];
+        if ($shipValue)
+            $ships = $shipValue->active_value_lists;
+
+        return response()->json([
+            'ships' => $ships,
+        ], 200);
     }
 
     public function index(UserProgram $userProgram)
@@ -53,6 +68,7 @@ class UserProgramTasksController extends Controller
         $userProgramTask->user = $userProgramTask->user;
         $userProgramTask->program = $userProgramTask->program;
         $userProgramTask->program_task = $userProgramTask->program_task;
+        $userProgramTask->ship = $userProgramTask->ship;
         return response()->json([
             'data'   =>  $userProgramTask,
             'success' =>  true

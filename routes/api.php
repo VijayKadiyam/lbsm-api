@@ -74,6 +74,7 @@ Route::resource('user_program_posts', 'UserProgramPostsController');
 Route::resource('programs/{program}/program_tasks', 'ProgramTasksController');
 
 Route::resource('program_tasks', 'ProgramTasksController');
+Route::get('user_program_tasks/masters', 'UserProgramTasksController@masters');
 Route::resource('user_programs/{user_program}/user_program_tasks', 'UserProgramTasksController');
 Route::post('upload_user_program_task_images', 'UploadsController@uploadUserProgramTaskImagePath');
 Route::resource('user_program_tasks', 'UserProgramTasksController');
