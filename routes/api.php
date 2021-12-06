@@ -81,5 +81,6 @@ Route::resource('user_program_tasks', 'UserProgramTasksController');
 Route::post('upload_user_program_task_documents', 'UploadsController@uploadUserProgramTaskDocumentImage');
 Route::resource('user_program_task_documents', 'UserProgramTaskDocumentsController');
 
-// User cOunt Route
+// User Count Route
 Route::get('user_counts', 'AnalyticsController@userCounts');
+Route::get('total_tasks_performed', 'AnalyticsController@total_tasks_performed');
