@@ -84,3 +84,4 @@ Route::resource('user_program_task_documents', 'UserProgramTaskDocumentsControll
 // User Count Route
 Route::get('user_counts', 'AnalyticsController@userCounts');
 Route::get('total_tasks_performed', 'AnalyticsController@total_tasks_performed');
+Route::get('top_performers', 'AnalyticsController@top_performers');
