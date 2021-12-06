@@ -30,7 +30,9 @@ class User extends Authenticatable
     'relation_with_id',
     'nationality',
     'rank',
-    'unique_id'
+    'unique_id',
+    'rank_id',
+
   ];
 
   /**
