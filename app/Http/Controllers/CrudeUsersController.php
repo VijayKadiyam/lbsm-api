@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\CrudeUser;
 use App\Imports\UsersImport;
 use App\User;
+use App\Value;
+use App\ValueList;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -45,6 +47,27 @@ class CrudeUsersController extends Controller
         $crude_users = CrudeUser::all();
         $i = 0;
         foreach ($crude_users as $user) {
+            // Rank Value
+            $rank_name = $user->rank;
+            $ValueRank = Value::where('name', '=', 'RANK')->first();
+            if ($ValueRank == '' || $ValueRank == null) {
+                $ValueRank = Value::create([
+                    'site_id' => '1',
+                    'name'   =>  'RANK',
+                ]);
+            }
+            $value_id = $ValueRank['id'];
+            $rank = ValueList::where('description', '=', $rank_name)
+                ->orWhere('code', '=', $rank_name)
+                ->first();
+            if ($rank == '' || $rank == null) {
+                $rank = ValueList::create([
+                    'site_id' => '1',
+                    'value_id' => $value_id,
+                    'description'   =>  $rank_name,
+                    'code'   =>  $rank_name,
+                ]);
+            }
             //  Check Existing user
             $user_data = User::where('unique_id', '=', $user->danaos_id)
                 ->first();
@@ -52,8 +75,8 @@ class CrudeUsersController extends Controller
                 // user column name = $user->crude_users column name
                 'nationality' => $user->nationality,
                 'rank'      => $user->rank,
+                'rank_id'      => $rank->id,
                 'first_name'     => $user->first_name,
-                'user_name'     => $user->first_name,
                 'user_name'     => $user->first_name,
                 'middle_name'        => $user->middle_name,
                 'last_name'       => $user->last_name,
