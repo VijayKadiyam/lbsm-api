@@ -77,13 +77,14 @@ class AnalyticsController extends Controller
             $total_task = $total_task->where('ship_id', '=', request()->ship);
         }
         if (request()->rank != null) {
+            $user_program_ids=[];
             $rank_id = request()->rank;
             // Rank Wise All Program Post
             $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
             foreach ($AllProgramPost as $key => $program_post) {
                 // Program Wise All UserProgram 
                 $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
-                $user_program_ids=[];
+                
                 foreach ($AllUserProgram as $key => $user_program) {
                     // User Program Wise All UserProgramTask
                     $user_program_ids[]=$user_program->id;
@@ -174,11 +175,26 @@ class AnalyticsController extends Controller
         ], 200);
     }
 
-    public function top_performers()
+    public function top_performers_by_Average()
     {
         $year = request()->year;
-        $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true)->get();
-
+        $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
+        if (request()->rank) {
+            $user_program_ids=[];
+            $rank_id = request()->rank;
+            // Rank Wise All Program Post
+            $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
+            foreach ($AllProgramPost as $key => $program_post) {
+                // Program Wise All UserProgram 
+                $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
+                foreach ($AllUserProgram as $key => $user_program) {
+                    // User Program Wise All UserProgramTask
+                    $user_program_ids[]=$user_program->id;
+                }
+            }
+            $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
+        }
+        $total_task = $total_task->get();
         // Array Alignment 
         $users = [];
         foreach ($total_task as $key => $task) {
@@ -216,6 +232,70 @@ class AnalyticsController extends Controller
         // Sorting Descending by Average
         usort($u, function ($a, $b) {
             return $b['average'] - $a['average'];
+        });
+        return response()->json([
+            'data'     =>  $u,
+            'user_count'     =>  sizeof($u),
+        ], 200);
+    }
+
+    public function top_performers_by_Task()
+    {
+        $year = request()->year;
+        $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
+        if (request()->rank) {
+            $user_program_ids=[];
+            $rank_id = request()->rank;
+            // Rank Wise All Program Post
+            $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
+            foreach ($AllProgramPost as $key => $program_post) {
+                // Program Wise All UserProgram 
+                $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
+                foreach ($AllUserProgram as $key => $user_program) {
+                    // User Program Wise All UserProgramTask
+                    $user_program_ids[]=$user_program->id;
+                }
+            }
+            $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
+        }
+        $total_task = $total_task->get();
+        // Array Alignment 
+        $users = [];
+        foreach ($total_task as $key => $task) {
+            $user_key = null;
+            $user_id = $task['user_id'];
+            $user = $task->user->toArray();
+            unset($task['user']);
+            $user_key = array_search($user_id, array_column($users, 'id'));
+            $task_id = $task->program_task_id;
+            if ($user_key !== 0 && $user_key == null) {
+                //    Push User in Users Array
+                $user['tasks'][$task_id] = $task;
+                $users[] = $user;
+            } else {
+                // Update User using User key
+                $users[$user_key]["tasks"][$task_id] = $task;
+            }
+        }
+
+        // Average Calculation
+        $u = [];
+        foreach ($users as $key => $user) {
+            $tasks_performed = sizeof($user['tasks']);
+            $total_marks = 0;
+            foreach ($user['tasks'] as $key => $task) {
+                $total_marks += $task->marks_obtained;
+            }
+            $average = $total_marks / $tasks_performed;
+            $user['task_perfomed'] = $tasks_performed;
+            $user['total_marks'] = $total_marks;
+            $user['average'] = $average;
+            $u[] = $user;
+        }
+
+        // Sorting Descending by Average
+        usort($u, function ($a, $b) {
+            return $b['task_perfomed'] - $a['task_perfomed'];
         });
         return response()->json([
             'data'     =>  $u,
