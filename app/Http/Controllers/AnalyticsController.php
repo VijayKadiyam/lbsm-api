@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Program;
+use App\ProgramPost;
 use App\User;
+use App\UserProgram;
 use App\UserProgramTask;
+use App\Value;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +15,31 @@ use Symfony\Component\ErrorHandler\Error\UndefinedFunctionError;
 
 class AnalyticsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['site']);
+    }
+    public function masters(Request $request)
+    {
+        $shipValue = Value::where('name', '=', 'SHIPS')
+            ->where('site_id', '=', $request->site->id)
+            ->first();
+        $ships = [];
+        if ($shipValue)
+            $ships = $shipValue->active_value_lists;
+        $postValue = Value::where('name', '=', 'POST')
+            ->where('site_id', '=', $request->site->id)
+            ->first();
+        $posts = [];
+        if ($postValue)
+            $posts = $postValue->active_value_lists;
+
+        return response()->json([
+            'ships' => $ships,
+            'posts' => $posts,
+        ], 200);
+    }
+
 
     public function userCounts()
     {
@@ -46,8 +74,22 @@ class AnalyticsController extends Controller
         $dec_count = 0;
         $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         if (request()->ship) {
-            // return request()->ship;
             $total_task = $total_task->where('ship_id', '=', request()->ship);
+        }
+        if (request()->rank != null) {
+            $rank_id = request()->rank;
+            // Rank Wise All Program Post
+            $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
+            foreach ($AllProgramPost as $key => $program_post) {
+                // Program Wise All UserProgram 
+                $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
+                $user_program_ids=[];
+                foreach ($AllUserProgram as $key => $user_program) {
+                    // User Program Wise All UserProgramTask
+                    $user_program_ids[]=$user_program->id;
+                }
+            }
+            $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
         }
         $total_task = $total_task->get();
         foreach ($total_task as $key => $task) {
@@ -110,6 +152,7 @@ class AnalyticsController extends Controller
         //     "November " . $year => $nov_count,
         //     "December " . $year => $dec_count,
         // ];
+
         $total_tasks_performed = [
             $jan_count,
             $feb_count,
@@ -169,7 +212,7 @@ class AnalyticsController extends Controller
             $user['average'] = $average;
             $u[] = $user;
         }
-        
+
         // Sorting Descending by Average
         usort($u, function ($a, $b) {
             return $b['average'] - $a['average'];
