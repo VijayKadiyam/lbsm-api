@@ -49,11 +49,11 @@ class CrudeUsersController extends Controller
         foreach ($crude_users as $user) {
             // Rank Value
             $rank_name = $user->rank;
-            $ValueRank = Value::where('name', '=', 'RANK')->first();
+            $ValueRank = Value::where('name', '=', 'POST')->first();
             if ($ValueRank == '' || $ValueRank == null) {
                 $ValueRank = Value::create([
                     'site_id' => '1',
-                    'name'   =>  'RANK',
+                    'name'   =>  'POST',
                 ]);
             }
             $value_id = $ValueRank['id'];
