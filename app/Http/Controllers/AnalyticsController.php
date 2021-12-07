@@ -76,7 +76,8 @@ class AnalyticsController extends Controller
         $dec_count = 0;
         $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         if (request()->ship) {
-            $total_task = $total_task->where('ship_id', '=', request()->ship);
+            $ships=explode(',',request()->ship);
+            $total_task = $total_task->whereIn('ship_id', $ships);
         }
         if (request()->rank != null) {
             $user_program_ids = [];
