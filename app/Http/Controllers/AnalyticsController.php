@@ -43,17 +43,19 @@ class AnalyticsController extends Controller
 
     public function userCounts()
     {
-        // return request()->year;
-        $user_counts = User::whereYear('created_at', '=', request()->year)->groupBy('rank')->select('rank', DB::raw('count(id) as count'))->get();
-        $program_counts = Program::get()->count();
-        // $user_counts['program_count'] = $program_counts;
+        if (request()->year != '') {
+            $user_counts = User::whereYear('created_at', '=', request()->year)->groupBy('rank')->select('rank', DB::raw('count(id) as count'))->get();
+            $program_counts = Program::whereYear('created_at', '=', request()->year)->get()->count();
+            $total_task_completed_counts = UserProgramTask::whereYear('completion_date', '=', request()->year)->where('is_completed', '=', true)->get()->count();
+            $inActive_user_counts = User::whereYear('created_at', '=', request()->year)->where('active', '=', false)->get()->count();
+        }
 
-        // return $user_counts;
         return response()->json([
             'data'     =>  $user_counts,
             'program_count'     =>  $program_counts,
+            'total_task_completed'     =>  $total_task_completed_counts,
+            'inActive_user'     =>  $inActive_user_counts,
         ], 200);
-        // return $users;
     }
 
     public function total_tasks_performed()
@@ -77,17 +79,17 @@ class AnalyticsController extends Controller
             $total_task = $total_task->where('ship_id', '=', request()->ship);
         }
         if (request()->rank != null) {
-            $user_program_ids=[];
+            $user_program_ids = [];
             $rank_id = request()->rank;
             // Rank Wise All Program Post
             $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
             foreach ($AllProgramPost as $key => $program_post) {
                 // Program Wise All UserProgram 
                 $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
-                
+
                 foreach ($AllUserProgram as $key => $user_program) {
                     // User Program Wise All UserProgramTask
-                    $user_program_ids[]=$user_program->id;
+                    $user_program_ids[] = $user_program->id;
                 }
             }
             $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
@@ -180,7 +182,7 @@ class AnalyticsController extends Controller
         $year = request()->year;
         $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         if (request()->rank) {
-            $user_program_ids=[];
+            $user_program_ids = [];
             $rank_id = request()->rank;
             // Rank Wise All Program Post
             $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
@@ -189,7 +191,7 @@ class AnalyticsController extends Controller
                 $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
                 foreach ($AllUserProgram as $key => $user_program) {
                     // User Program Wise All UserProgramTask
-                    $user_program_ids[]=$user_program->id;
+                    $user_program_ids[] = $user_program->id;
                 }
             }
             $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
@@ -244,7 +246,7 @@ class AnalyticsController extends Controller
         $year = request()->year;
         $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         if (request()->rank) {
-            $user_program_ids=[];
+            $user_program_ids = [];
             $rank_id = request()->rank;
             // Rank Wise All Program Post
             $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
@@ -253,7 +255,7 @@ class AnalyticsController extends Controller
                 $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
                 foreach ($AllUserProgram as $key => $user_program) {
                     // User Program Wise All UserProgramTask
-                    $user_program_ids[]=$user_program->id;
+                    $user_program_ids[] = $user_program->id;
                 }
             }
             $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
