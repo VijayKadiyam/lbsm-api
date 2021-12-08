@@ -44,10 +44,21 @@ class AnalyticsController extends Controller
     public function userCounts()
     {
         if (request()->year != '') {
-            $user_counts = User::whereYear('created_at', '=', request()->year)->groupBy('rank')->select('rank', DB::raw('count(id) as count'))->get();
-            $program_counts = Program::whereYear('created_at', '=', request()->year)->get()->count();
-            $total_task_completed_counts = UserProgramTask::whereYear('completion_date', '=', request()->year)->where('is_completed', '=', true)->get()->count();
-            $inActive_user_counts = User::whereYear('created_at', '=', request()->year)->where('active', '=', false)->get()->count();
+            $user_counts = User::whereYear('created_at', '=', request()->year)
+                ->groupBy('rank')
+                ->select('rank', DB::raw('count(id) as userCount'))
+                ->get();
+
+            $program_counts = Program::whereYear('created_at', '=', request()->year)
+                ->get()->count();
+
+            $total_task_completed_counts = UserProgramTask::whereYear('completion_date', '=', request()->year)
+                ->where('is_completed', '=', true)
+                ->get()->count();
+
+            $inActive_user_counts = User::whereYear('created_at', '=', request()->year)
+                ->where('active', '=', false)
+                ->get()->count();
         }
 
         return response()->json([
@@ -309,7 +320,7 @@ class AnalyticsController extends Controller
     public function top_performers()
     {
         $year = request()->year;
-        $type=request()->type;
+        $type = request()->type;
         $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         if (request()->rank) {
             $user_program_ids = [];
@@ -361,7 +372,7 @@ class AnalyticsController extends Controller
             $u[] = $user;
         }
 
-        if ( $type== 'true') {
+        if ($type == 'true') {
             $filter_type = 'Tasks';
             // Sorting Descending by TASK
             usort($u, function ($a, $b) {
