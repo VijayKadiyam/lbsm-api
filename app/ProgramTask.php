@@ -27,7 +27,12 @@ class ProgramTask extends Model
     }
     public function program()
     {
-        return $this->belongsTo(Program::class);
+        return $this->belongsTo(Program::class)->with('program_posts');
+    }
+    public function program_post()
+    {
+        return $this->belongsTo(ProgramPost::class)
+            ->with('post');
     }
     public function user_program_tasks()
     {

@@ -21,6 +21,11 @@ class ProgramPost extends Model
   {
     return $this->belongsTo(Program::class);
   }
+  public function program_tasks()
+  {
+    return $this->hasMany(ProgramTask::class)
+      ->with('program', 'program_post');
+  }
   public function user_program_posts()
   {
     return $this->hasMany(UserProgramPost::class);

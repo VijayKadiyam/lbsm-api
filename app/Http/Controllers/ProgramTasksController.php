@@ -52,6 +52,7 @@ class ProgramTasksController extends Controller
     public function show(Program $program, ProgramTask $programTask)
     {
         $programTask->program = $program;
+        $programTask->program_post = $programTask->program_post;
         return response()->json([
             'data'   =>  $programTask,
             'success' =>  true

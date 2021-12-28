@@ -18,7 +18,7 @@ class Site extends Model
   
   public function programs()
   {
-    return $this->hasMany(Program::class);
+    return $this->hasMany(Program::class)->with('program_posts');
   }
   
   public function program_posts()
@@ -41,7 +41,7 @@ class Site extends Model
   public function program_tasks()
   {
     return $this->hasMany(ProgramTask::class)
-    ->with('program');
+    ->with('program','program_post');
   }
 
   public function user_program_tasks()

@@ -15,8 +15,8 @@ class ProgramsController extends Controller
     public function index(Request $request)
     {
         $count = 0;
-            $programs = request()->site->programs;
-            $count = $programs->count();
+        $programs = request()->site->programs;
+        $count = $programs->count();
         return response()->json([
             'data'     =>  $programs,
             'count'    =>   $count
@@ -49,6 +49,7 @@ class ProgramsController extends Controller
      */
     public function show(Program $program)
     {
+        $program->program_posts = $program->program_posts;
         return response()->json([
             'data'   =>  $program,
             'success' =>  true
