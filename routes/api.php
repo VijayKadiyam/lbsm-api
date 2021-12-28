@@ -73,6 +73,7 @@ Route::get('user_program_posts/masters', 'UserProgramPostsController@masters');
 Route::resource('user_program_posts', 'UserProgramPostsController');
 Route::resource('programs/{program}/program_tasks', 'ProgramTasksController');
 
+Route::post('program_tasks/filter', 'ProgramTasksController@filter');
 Route::resource('program_tasks', 'ProgramTasksController');
 Route::get('user_program_tasks/masters', 'UserProgramTasksController@masters');
 Route::resource('user_programs/{user_program}/user_program_tasks', 'UserProgramTasksController');

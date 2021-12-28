@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Program;
 use App\ProgramTask;
+use App\UserProgramPost;
 use Illuminate\Http\Request;
 
 class ProgramTasksController extends Controller
@@ -25,6 +26,18 @@ class ProgramTasksController extends Controller
         ], 200);
     }
 
+
+    public function filter(Request $request)
+    {
+        $user_id=$request->user_id;
+        $Current_user_program_post=UserProgramPost::where('user_id','=',$user_id)->latest()->first();
+        $program_post_id= $Current_user_program_post->program_post_id;
+        $ProgramTasks=ProgramTask::where('program_post_id','=',$program_post_id)->get();
+        return response()->json([
+            'data'   =>  $ProgramTasks,
+            'success' =>  true
+        ], 200); 
+    }
     /*
      * To store a new programTask
      *
