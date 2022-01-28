@@ -22,11 +22,19 @@ class UsersController extends Controller
       ->where('site_id', '=', $request->site->id)
       ->first();
     $ranks = [];
+
     if ($rankValue)
       $ranks = $rankValue->active_value_lists;
 
+    $nationalityValue = Value::where('name', '=', 'NATIONALITY')
+      ->where('site_id', '=', $request->site->id)
+      ->first();
+    $nationalities = [];
+    if ($nationalityValue)
+      $nationalities = $nationalityValue->active_value_lists;
     return response()->json([
       'ranks'               =>  $ranks,
+      'nationalities'               =>  $nationalities,
     ], 200);
   }
 
@@ -40,10 +48,10 @@ class UsersController extends Controller
     $role = 3;
     $users = [];
     $users = $users = $request->site->users()->with('roles')
-    ->whereHas('roles',  function ($q) {
-      $q->where('name', '!=', 'Admin');
-      $q->where('name', '!=', 'Main Admin');
-    })->latest()->get();
+      ->whereHas('roles',  function ($q) {
+        $q->where('name', '!=', 'Admin');
+        $q->where('name', '!=', 'Main Admin');
+      })->latest()->get();
     // if ($request->search == 'all')
     //   $users = $request->site->users()->with('roles')
     //     ->whereHas('roles',  function ($q) {
