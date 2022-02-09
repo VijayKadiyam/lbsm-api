@@ -267,4 +267,12 @@ class User extends Authenticatable
   {
     return $this->hasMany(UserProgramPost::class);
   }
+  public function karco_tasks()
+  {
+    return $this->hasMany(KarcoTask::class);
+  }
+  public function rank()
+  {
+    return $this->belongsTo(ValueList::class);
+  }
 }
