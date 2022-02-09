@@ -223,6 +223,10 @@ class User extends Authenticatable
   {
     return $this->belongsTo(ValueList::class);
   }
+  public function rank()
+  {
+    return $this->belongsTo(ValueList::class);
+  }
 
   public function religion()
   {

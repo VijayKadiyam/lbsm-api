@@ -13,7 +13,7 @@ class Site extends Model
   public function users()
   {
     return $this->belongsToMany(User::class)
-      ->with('roles', 'sites');
+      ->with('roles', 'sites','rank');
   }
 
   public function programs()
