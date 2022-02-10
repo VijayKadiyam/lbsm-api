@@ -138,7 +138,7 @@ class CrudeKarcoTasksController extends Controller
                     'obtained_marks' =>        $user->obtained_marks,
                     'total_marks' =>        $user->total_marks,
                     'percentage' =>        $user->percentage,
-                    'done_on' =>        $user->done_on,
+                    'done_on' =>        Carbon::parse($user->done_on)->format('Y-m-d'),
                     'due_days' =>        $user->due_days,
                     'assessment_status' =>        $user->assessment_status,
                 ];
