@@ -275,4 +275,8 @@ class User extends Authenticatable
   {
     return $this->hasMany(KarcoTask::class);
   }
+  public function videotel_tasks()
+  {
+    return $this->hasMany(VideotelTask::class);
+  }
 }

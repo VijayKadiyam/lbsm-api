@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\CrudeKarcoTask;
-use App\Imports\KarcoTaskImport;
-use App\KarcoTask;
+use App\CrudeVideotelTask;
+use App\Imports\VideotelTaskImport;
 use App\User;
 use App\Value;
 use App\ValueList;
+use App\VideotelTask;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CrudeKarcoTasksController extends Controller
+class CrudeVideotelTasksController extends Controller
 {
     public function __construct()
     {
@@ -23,19 +23,19 @@ class CrudeKarcoTasksController extends Controller
     public function index()
     {
         return response()->json([
-            'data'  =>  CrudeKarcoTask::all()
+            'data'  =>  CrudeVideotelTask::all()
         ]);
     }
 
-    public function uploadKarcoTask(Request $request)
+    public function uploadVideotelTask(Request $request)
     {
         set_time_limit(0);
-        if ($request->hasFile('karcotasksData')) {
-            $file = $request->file('karcotasksData');
+        if ($request->hasFile('videoteltasksData')) {
+            $file = $request->file('videoteltasksData');
 
-            Excel::import(new KarcoTaskImport, $file);
+            Excel::import(new VideotelTaskImport, $file);
             return response()->json([
-                'data'    =>  CrudeKarcoTask::all(),
+                'data'    =>  CrudeVideotelTask::all(),
                 'success' =>  true
             ]);
         }
@@ -43,15 +43,15 @@ class CrudeKarcoTasksController extends Controller
 
 
 
-    public function processKarcoTask()
+    public function processVideotelTask()
     {
         set_time_limit(0);
-        $crude_karco_Tasks = CrudeKarcoTask::all();
+        $crude_videotel_Tasks = CrudeVideotelTask::all();
         $i = 0;
-        foreach ($crude_karco_Tasks as $user) {
+        foreach ($crude_videotel_Tasks as $user) {
 
             // Ship Value
-            $ship_name = $user->vessel_name;
+            $ship_name = $user->location;
             $ValueRank = Value::where('name', '=', 'SHIP')->first();
             if ($ValueRank == '' || $ValueRank == null) {
                 $ValueRank = Value::create([
@@ -93,17 +93,17 @@ class CrudeKarcoTasksController extends Controller
                 ]);
             }
             //  Check Existing user
-            $user_data = User::where('unique_id', '=', $user->employee_id)
+            $user_data = User::where('unique_id', '=', $user->crew_id)
                 ->first();
             $data = [
-                // user column name = $user->crude_karco_Tasks column name
-                'nationality' => $user->nationality,
+                // user column name = $user->crude_videotel_Tasks column name
+                // 'nationality' => $user->nationality,
                 'rank_id'      => $rank->id,
-                'first_name'     => $user->crew_name,
-                'user_name'     => $user->crew_name,
+                'first_name'     => $user->first_name,
+                'user_name'     => $user->first_name,
                 // 'middle_name'        => $user->middle_name,
-                // 'last_name'       => $user->last_name,
-                'unique_id'        => $user->employee_id,
+                'last_name'       => $user->last_name,
+                'unique_id'        => $user->crew_id,
                 // 'dob'        => $user->dob,
                 'active'          =>  1,
                 'password' => bcrypt('123456'),
@@ -126,24 +126,18 @@ class CrudeKarcoTasksController extends Controller
             $user_id = $user_data['id'];
 
             if ($user_id) {
-                $karco_tasks = [
+                $videotel_tasks = [
                     'user_id'     => $user_id,
                     'ship_id'     => $ship->id,
-                    'department' => $user->department,
-                    'status' =>        $user->status,
-                    'signed_on' =>        Carbon::parse($user->signed_on)->format('Y-m-d'),
-                    'video_title' =>        $user->video_title,
-                    'no_of_preview_watched' =>        $user->no_of_preview_watched,
-                    'no_of_video_watched' =>        $user->no_of_video_watched,
-                    'obtained_marks' =>        $user->obtained_marks,
-                    'total_marks' =>        $user->total_marks,
-                    'percentage' =>        $user->percentage,
-                    'done_on' =>        $user->done_on,
-                    'due_days' =>        $user->due_days,
-                    'assessment_status' =>        $user->assessment_status,
+                    'training_title' => $user->training_title,
+                    'module' =>        $user->module,
+                    'type' =>        $user->type,
+                    'date' =>       Carbon::createFromFormat('d/m/Y', $user->date)->format('Y-m-d'),
+                    'duration' =>        $user->duration,
+                    'score' =>        $user->score,
                 ];
-                $karco_task_data = new KarcoTask($karco_tasks);
-                request()->site->karco_tasks()->save($karco_task_data);
+                $videotel_task_data = new VideotelTask($videotel_tasks);
+                request()->site->videotel_tasks()->save($videotel_task_data);
             }
             $i++;
         }
@@ -151,6 +145,6 @@ class CrudeKarcoTasksController extends Controller
 
     public function truncate()
     {
-        CrudeKarcoTask::truncate();
+        CrudeVideotelTask::truncate();
     }
 }
