@@ -52,7 +52,7 @@ class CrudeVideotelTasksController extends Controller
 
             // Ship Value
             $ship_name = $user->location;
-            $ValueRank = Value::where('name', '=', 'SHIP')->first();
+            $ValueRank = Value::where('name', '=', 'SHIPS')->first();
             if ($ValueRank == '' || $ValueRank == null) {
                 $ValueRank = Value::create([
                     'site_id' => '1',
