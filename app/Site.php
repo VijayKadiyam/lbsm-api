@@ -66,4 +66,12 @@ class Site extends Model
   {
     return $this->hasMany(KarcoTask::class)->with('ship','user');
   }
+  public function crude_videotel_tasks()
+  {
+    return $this->hasMany(CrudeVideotelTask::class);
+  }
+  public function videotel_tasks()
+  {
+    return $this->hasMany(VideotelTask::class)->with('ship','user');
+  }
 }
