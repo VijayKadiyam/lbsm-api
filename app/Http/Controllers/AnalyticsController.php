@@ -485,7 +485,8 @@ class AnalyticsController extends Controller
     {
         $year = request()->year;
         $type = request()->type;
-        $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
+        $total_task = UserProgramTask::where('is_completed', '=', true);
+        // $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         if (request()->rank) {
             $user_program_ids = [];
             $rank_id = request()->rank;
@@ -502,6 +503,7 @@ class AnalyticsController extends Controller
             $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
         }
         $total_task = $total_task->get();
+        // return $total_task;
         // Array Alignment 
         $users = [];
         foreach ($total_task as $key => $task) {

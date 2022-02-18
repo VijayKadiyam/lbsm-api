@@ -19,7 +19,9 @@ class UserProgramTask extends Model
         'imagepath2',
         'imagepath3',
         'imagepath4',
-        'ship_id'
+        'ship_id',
+        'from_date',
+        'to_date',
     ];
     public function site()
     {
