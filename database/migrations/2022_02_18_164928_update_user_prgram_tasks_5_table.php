@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateUsers1Table extends Migration
+class UpdateUserPrgramTasks5Table extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class UpdateUsers1Table extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('nationality', 100)->nullable();
-            $table->string('rank', 100)->nullable();
-            $table->string('unique_id', 100)->nullable();
+        Schema::table('user_program_tasks', function (Blueprint $table) {
+            $table->string('from_date')->nullable();
+            $table->string('to_date')->nullable();
         });
     }
 
@@ -27,7 +26,7 @@ class UpdateUsers1Table extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('user_program_tasks', function (Blueprint $table) {
             //
         });
     }

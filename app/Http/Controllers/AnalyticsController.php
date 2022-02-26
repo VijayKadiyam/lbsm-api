@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\KarcoTask;
 use App\Program;
 use App\ProgramPost;
 use App\User;
 use App\UserProgram;
 use App\UserProgramTask;
 use App\Value;
+use App\VideotelTask;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -85,10 +87,16 @@ class AnalyticsController extends Controller
         $oct_count = 0;
         $nov_count = 0;
         $dec_count = 0;
+
         $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
+        $total_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed');
+        $total_videotel_tasks = VideotelTask::whereYear('date', '=', $year);
+
         if (request()->ship) {
             $ships = explode(',', request()->ship);
             $total_task = $total_task->whereIn('ship_id', $ships);
+            $total_karco_tasks = $total_karco_tasks->whereIn('ship_id', $ships);
+            $total_videotel_tasks = $total_videotel_tasks->whereIn('ship_id', $ships);
         }
         if (request()->rank != null) {
             $user_program_ids = [];
@@ -104,9 +112,21 @@ class AnalyticsController extends Controller
                     $user_program_ids[] = $user_program->id;
                 }
             }
+
+            // All User Of that Rank [For Total KARCO TASK & Videotel Task]
+            $ranked_users = User::where('rank_id', '=', $rank_id)->get();
+            foreach ($ranked_users as $key => $user) {
+                $user_ids[] = $user->id;
+            }
+
             $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
+            $total_karco_tasks = $total_karco_tasks->whereIn('user_id', $user_ids);
+            $total_videotel_tasks = $total_videotel_tasks->whereIn('user_id', $user_ids);
         }
         $total_task = $total_task->get();
+        $total_karco_tasks = $total_karco_tasks->get();
+        $total_videotel_tasks = $total_videotel_tasks->get();
+
         foreach ($total_task as $key => $task) {
             $task_month = Carbon::parse($task['completion_date'])->month;
             switch ($task_month) {
@@ -152,6 +172,121 @@ class AnalyticsController extends Controller
                     break;
             }
         }
+        $total_no_of_video_watched_in_jan = 0;
+        $total_no_of_video_watched_in_feb = 0;
+        $total_no_of_video_watched_in_march = 0;
+        $total_no_of_video_watched_in_apr = 0;
+        $total_no_of_video_watched_in_may = 0;
+        $total_no_of_video_watched_in_june = 0;
+        $total_no_of_video_watched_in_july = 0;
+        $total_no_of_video_watched_in_aug = 0;
+        $total_no_of_video_watched_in_sept = 0;
+        $total_no_of_video_watched_in_oct = 0;
+        $total_no_of_video_watched_in_nov = 0;
+        $total_no_of_video_watched_in_dec = 0;
+        foreach ($total_karco_tasks as $key => $karco_task) {
+            $task_month = Carbon::parse($karco_task['done_on'])->month;
+            $video_watched = $karco_task->no_of_video_watched;
+            switch ($task_month) {
+                case '1':
+                    $total_no_of_video_watched_in_jan += $video_watched;
+                    break;
+                case '2':
+                    $total_no_of_video_watched_in_feb += $video_watched;
+                    break;
+                case '3':
+                    $total_no_of_video_watched_in_march += $video_watched;
+                    break;
+                case '4':
+                    $total_no_of_video_watched_in_apr += $video_watched;
+                    break;
+                case '5':
+                    $total_no_of_video_watched_in_may += $video_watched;
+                    break;
+                case '6':
+                    $total_no_of_video_watched_in_june += $video_watched;
+                    break;
+                case '7':
+                    $total_no_of_video_watched_in_july += $video_watched;
+                    break;
+                case '8':
+                    $total_no_of_video_watched_in_aug += $video_watched;
+                    break;
+                case '9':
+                    $total_no_of_video_watched_in_sept += $video_watched;
+                    break;
+                case '10':
+                    $total_no_of_video_watched_in_oct += $video_watched;
+                    break;
+                case '11':
+                    $total_no_of_video_watched_in_nov += $video_watched;
+                    break;
+                case '12':
+                    $total_no_of_video_watched_in_dec += $video_watched;
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+        $total_videotel_task_in_jan = 0;
+        $total_videotel_task_in_feb = 0;
+        $total_videotel_task_in_march = 0;
+        $total_videotel_task_in_apr = 0;
+        $total_videotel_task_in_may = 0;
+        $total_videotel_task_in_june = 0;
+        $total_videotel_task_in_july = 0;
+        $total_videotel_task_in_aug = 0;
+        $total_videotel_task_in_sept = 0;
+        $total_videotel_task_in_oct = 0;
+        $total_videotel_task_in_nov = 0;
+        $total_videotel_task_in_dec = 0;
+        foreach ($total_videotel_tasks as $key => $videotel_task) {
+            $task_month = Carbon::parse($videotel_task['date'])->month;
+            switch ($task_month) {
+                case '1':
+                    $total_videotel_task_in_jan++;
+                    break;
+                case '2':
+                    $total_videotel_task_in_feb++;
+                    break;
+                case '3':
+                    $total_videotel_task_in_march++;
+                    break;
+                case '4':
+                    $total_videotel_task_in_apr++;
+                    break;
+                case '5':
+                    $total_videotel_task_in_may++;
+                    break;
+                case '6':
+                    $total_videotel_task_in_june++;
+                    break;
+                case '7':
+                    $total_videotel_task_in_july++;
+                    break;
+                case '8':
+                    $total_videotel_task_in_aug++;
+                    break;
+                case '9':
+                    $total_videotel_task_in_sept++;
+                    break;
+                case '10':
+                    $total_videotel_task_in_oct++;
+                    break;
+                case '11':
+                    $total_videotel_task_in_nov++;
+                    break;
+                case '12':
+                    $total_videotel_task_in_dec++;
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
 
         // $total_tasks_performed = [
         // "January " . $year => $jan_count,
@@ -182,9 +317,38 @@ class AnalyticsController extends Controller
             $nov_count,
             $dec_count,
         ];
-
+        $total_karco_tasks_performed = [
+            $total_no_of_video_watched_in_jan,
+            $total_no_of_video_watched_in_feb,
+            $total_no_of_video_watched_in_march,
+            $total_no_of_video_watched_in_apr,
+            $total_no_of_video_watched_in_may,
+            $total_no_of_video_watched_in_june,
+            $total_no_of_video_watched_in_july,
+            $total_no_of_video_watched_in_aug,
+            $total_no_of_video_watched_in_sept,
+            $total_no_of_video_watched_in_oct,
+            $total_no_of_video_watched_in_nov,
+            $total_no_of_video_watched_in_dec,
+        ];
+        $total_videotel_tasks_performed = [
+            $total_videotel_task_in_jan,
+            $total_videotel_task_in_feb,
+            $total_videotel_task_in_march,
+            $total_videotel_task_in_apr,
+            $total_videotel_task_in_may,
+            $total_videotel_task_in_june,
+            $total_videotel_task_in_july,
+            $total_videotel_task_in_aug,
+            $total_videotel_task_in_sept,
+            $total_videotel_task_in_oct,
+            $total_videotel_task_in_nov,
+            $total_videotel_task_in_dec,
+        ];
         return response()->json([
             'data'     =>  $total_tasks_performed,
+            'total_karco_tasks_performed' => $total_karco_tasks_performed,
+            'total_videotel_tasks_performed' => $total_videotel_tasks_performed,
             'success' => true
         ], 200);
     }
@@ -321,7 +485,8 @@ class AnalyticsController extends Controller
     {
         $year = request()->year;
         $type = request()->type;
-        $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
+        $total_task = UserProgramTask::where('is_completed', '=', true);
+        // $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         if (request()->rank) {
             $user_program_ids = [];
             $rank_id = request()->rank;
@@ -338,6 +503,7 @@ class AnalyticsController extends Controller
             $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
         }
         $total_task = $total_task->get();
+        // return $total_task;
         // Array Alignment 
         $users = [];
         foreach ($total_task as $key => $task) {

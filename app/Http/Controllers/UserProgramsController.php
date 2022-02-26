@@ -30,7 +30,7 @@ class UserProgramsController extends Controller
         $count = 0;
         if ($request->search) {
             $user_programs = request()->site->user_programs()
-                ->where('user_id', 'LIKE', '%' . $request->search . '%')
+                ->where('user_id', '=' , $request->search)
                 ->get();
             $count = $user_programs->count();
         } else if (request()->page && request()->rowsPerPage) {

@@ -271,4 +271,12 @@ class User extends Authenticatable
   {
     return $this->hasMany(UserProgramPost::class);
   }
+  public function karco_tasks()
+  {
+    return $this->hasMany(KarcoTask::class);
+  }
+  public function videotel_tasks()
+  {
+    return $this->hasMany(VideotelTask::class);
+  }
 }

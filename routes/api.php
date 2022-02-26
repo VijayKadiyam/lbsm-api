@@ -89,3 +89,21 @@ Route::get('total_tasks_performed', 'AnalyticsController@total_tasks_performed')
 Route::get('top_performers_by_average', 'AnalyticsController@top_performers_by_Average');
 Route::get('top_performers_by_task', 'AnalyticsController@top_performers_by_Task');
 Route::get('top_performers', 'AnalyticsController@top_performers');
+
+// Upload Excell KARCO User
+Route::get('crude_karco_tasks', 'CrudeKarcoTasksController@index');
+Route::post('upload_karco_task', 'CrudeKarcoTasksController@uploadKarcoTask');
+Route::get('process_karco_task', 'CrudeKarcoTasksController@processKarcoTask');
+Route::get('truncate_karco_tasks', 'CrudeKarcoTasksController@truncate');
+
+// KARCO Task
+Route::resource('karco_tasks', 'KarcoTasksController');
+
+// Upload Excell Videotel User
+Route::get('crude_videotel_tasks', 'CrudeVideotelTasksController@index');
+Route::post('upload_videotel_task', 'CrudeVideotelTasksController@uploadVideotelTask');
+Route::get('process_videotel_task', 'CrudeVideotelTasksController@processVideotelTask');
+Route::get('truncate_videotel_tasks', 'CrudeVideotelTasksController@truncate');
+
+// Videotel Task
+Route::resource('videotel_tasks', 'VideotelTasksController');
