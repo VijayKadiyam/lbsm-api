@@ -16,5 +16,4 @@ class CrudeUser extends Model
         'danaos_id',
         'dob',
     ];
-    
 }
