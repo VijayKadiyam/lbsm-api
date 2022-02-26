@@ -21,7 +21,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           script: |
             cd /var/www/vhosts/lbsm/lbsm-api
-            git pull https://github.com/VijayKadiyam/test-droplet.git
+            git pull https://github.com/VijayKadiyam/lbsm-api.git
             echo 'Deployment Done'
             
       - name: Post Deployment
