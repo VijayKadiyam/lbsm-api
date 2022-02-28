@@ -36,19 +36,21 @@ class UserProgramTasksController extends Controller
         $count_program_tasks = 0;
         $user_program_tasks = $userProgram->user_program_tasks;
         $count = $user_program_tasks->count();
-        $count_program_tasks = $user_program_tasks[0]->program->program_tasks->count();
+        $program_tasks = $user_program_tasks[0]->program->program_tasks->count();
+        $count_program_tasks = $program_tasks->count();
+        // $count_program_tasks = $program_tasks->groupBy('program_post_id')->count();
         // return $count_program_tasks;
         $total_completed_task = 0;
         $total_pending_task = 0;
         $total_pending_program_tasks = 0;
         $total_marks_obtained = 0;
         $average_score = 0;
+        $final_total_completed_task = 0;
+        $final_total_pending_task = 0;
+        $Final_average_score = 0;
+        $final_total_marks_obtained = 0;
+        $final_total_pending_program_tasks = 0;
         foreach ($user_program_tasks as $key => $value) {
-            $final_total_completed_task = 0;
-            $final_total_pending_task = 0;
-            $Final_average_score = 0;
-            $final_total_marks_obtained = 0;
-            $final_total_pending_program_tasks = 0;
             // $count_is_completed = $value->is_completed;
             if ($value->is_completed == 1) {
                 $total_completed_task += $value->is_completed;
