@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Program;
+use App\ProgramTask;
 use App\UserProgram;
+use App\UserProgramPost;
 use App\UserProgramTask;
 use App\Value;
 use Illuminate\Http\Request;
@@ -36,10 +38,11 @@ class UserProgramTasksController extends Controller
         $count_program_tasks = 0;
         $user_program_tasks = $userProgram->user_program_tasks;
         $count = $user_program_tasks->count();
-        // $program_tasks = $user_program_tasks[0]->program->program_tasks->count();
-        // $count_program_tasks = $program_tasks->count();
-        // $count_program_tasks = $program_tasks->groupBy('program_post_id')->count();
-        // return $count_program_tasks;
+
+        $user_id = request()->user_id;
+        $Current_user_program_post = UserProgramPost::where('user_id', '=', $user_id)->latest()->first();
+        $program_post_id = $Current_user_program_post->program_post_id;
+        $count_program_tasks = ProgramTask::where('program_post_id', '=', $program_post_id)->get()->count();
         $total_completed_task = 0;
         $total_pending_task = 0;
         $total_pending_program_tasks = 0;
@@ -68,7 +71,7 @@ class UserProgramTasksController extends Controller
             $Final_average_score = $average_score;
 
             $final_total_pending_program_tasks = $count_program_tasks - $final_total_completed_task;
-            
+
             // $user_program_tasks[] = $user_program_tasks;
         }
 

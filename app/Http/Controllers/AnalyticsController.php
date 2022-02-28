@@ -534,7 +534,7 @@ class AnalyticsController extends Controller
             $average = $total_marks / $tasks_performed;
             $user['task_perfomed'] = $tasks_performed;
             $user['total_marks'] = $total_marks;
-            $user['average'] = $average;
+            $user['average'] = number_format((float)$average, 1, '.', '');
             $u[] = $user;
         }
 
