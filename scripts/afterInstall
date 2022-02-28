@@ -3,7 +3,6 @@ cd /var/www/vhosts/lbsm/lbsm-api
 
 php /usr/local/bin/composer install
 
-
 sudo chmod -R 777 storage public vendor bootstrap database
 
 php /usr/local/bin/composer dump-autoload
