@@ -32,4 +32,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           script: |
             cd /var/www/vhosts/lbsm/lbsm-api
+            git add .
+            git commit -m "Latest commit"
+            php artisan migrate
+            php artisan config:clear
+            php artisan cache:clear
             echo 'Post Deployment'
