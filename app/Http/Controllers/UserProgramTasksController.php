@@ -36,8 +36,8 @@ class UserProgramTasksController extends Controller
         $count_program_tasks = 0;
         $user_program_tasks = $userProgram->user_program_tasks;
         $count = $user_program_tasks->count();
-        $program_tasks = $user_program_tasks[0]->program->program_tasks->count();
-        $count_program_tasks = $program_tasks->count();
+        // $program_tasks = $user_program_tasks[0]->program->program_tasks->count();
+        // $count_program_tasks = $program_tasks->count();
         // $count_program_tasks = $program_tasks->groupBy('program_post_id')->count();
         // return $count_program_tasks;
         $total_completed_task = 0;
