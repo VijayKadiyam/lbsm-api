@@ -74,4 +74,8 @@ class Site extends Model
   {
     return $this->hasMany(VideotelTask::class)->with('ship','user');
   }
+  public function user_ships()
+  {
+    return $this->hasMany(UserShip::class)->with('ship','user');
+  }
 }
