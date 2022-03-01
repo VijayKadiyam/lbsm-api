@@ -492,6 +492,7 @@ class AnalyticsController extends Controller
             $rank_id = request()->rank;
             // Rank Wise All Program Post
             $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
+
             foreach ($AllProgramPost as $key => $program_post) {
                 // Program Wise All UserProgram 
                 $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
@@ -501,6 +502,8 @@ class AnalyticsController extends Controller
                 }
             }
             $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
+            return $total_task->get();
+
         }
         $total_task = $total_task->get();
         // return $total_task;

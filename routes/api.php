@@ -107,3 +107,7 @@ Route::get('truncate_videotel_tasks', 'CrudeVideotelTasksController@truncate');
 
 // Videotel Task
 Route::resource('videotel_tasks', 'VideotelTasksController');
+
+// User ship 
+Route::get('user_ships/masters', 'UserShipsController@masters');
+Route::resource('user_ships', 'UserShipsController');

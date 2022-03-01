@@ -279,4 +279,8 @@ class User extends Authenticatable
   {
     return $this->hasMany(VideotelTask::class);
   }
+  public function user_ships()
+  {
+    return $this->hasMany(UserShip::class);
+  }
 }
