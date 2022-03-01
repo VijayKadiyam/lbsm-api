@@ -60,15 +60,30 @@ class UserProgramPostsController extends Controller
      */
     public function store(Request $request)
     {
+        // return 1;
         $request->validate([
             'user_id'        =>  'required',
         ]);
-
-        $userProgramPost = new UserProgramPost(request()->all());
-        $request->site->user_program_posts()->save($userProgramPost);
+        // return $request->all();
+        $msg = '';
+        $userProgramPost = '';
+        $UserprogramPosts = request()->site->user_program_posts()
+            ->where('user_id', '=', $request->user_id)
+            ->where('program_id', '=', $request->program_id)
+            ->where('program_post_id', '=', $request->program_post_id)
+            ->get()->count();
+        // return $UserprogramPosts;
+        if ($UserprogramPosts == 0) {
+            $userProgramPost = new UserProgramPost(request()->all());
+            $request->site->user_program_posts()->save($userProgramPost);
+            
+        } else {
+            $msg = "User Program Post Already Added.";
+        }
 
         return response()->json([
-            'data'    =>  $userProgramPost
+            'data'    =>  $userProgramPost,
+            'msg'    =>  $msg,
         ], 201);
     }
 
