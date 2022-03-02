@@ -34,8 +34,15 @@ class UserShipsController extends Controller
     public function index(Request $request)
     {
         $count = 0;
-        $user_ships = request()->site->user_ships;
-        $count = $user_ships->count();
+        if ($request->user_id) {
+            $user_ships = request()->site->user_ships()
+                ->where('user_id', '=', $request->user_id)
+                ->get();
+        }else{
+
+            $user_ships = request()->site->user_ships;
+            $count = $user_ships->count();
+        }
 
         return response()->json([
             'data'     =>  $user_ships,
