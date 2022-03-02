@@ -21,6 +21,7 @@ class UserProgramTask extends Model
         'imagepath4',
         'ship_id',
         'from_date',
+        'active',
         'to_date',
     ];
     public function site()
