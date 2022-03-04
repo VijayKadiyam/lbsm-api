@@ -58,7 +58,7 @@ class UploadsController extends Controller
       $name = $request->filename ?? 'photo.';
       $name = $name . $file->getClientOriginalExtension();;
       $documentImagePath = 'lbsm/user-program-task-documents/' .  $request->id . '/' . $name;
-      Storage::disk('local')->put($documentImagePath, file_get_contents($file), 'public');
+      Storage::disk('s3')->put($documentImagePath, file_get_contents($file), 'public');
 
       $group = UserProgramTaskDocument::where('id', '=', request()->id)->first();
       $group->document_path = $documentImagePath;
@@ -91,7 +91,7 @@ class UploadsController extends Controller
       $name = $request->filename ?? 'imagepath1.';
       $name = $name . $file->getClientOriginalExtension();;
       $imagePath1 = 'lbsm/user-program-task/' .  $request->user_program_task_id . '/' . $name;
-      Storage::disk('local')->put($imagePath1, file_get_contents($file), 'public');
+      Storage::disk('s3')->put($imagePath1, file_get_contents($file), 'public');
 
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
       $userProgramTask->imagepath1 = $imagePath1;
@@ -104,7 +104,7 @@ class UploadsController extends Controller
       $name = $request->filename ?? 'imagepath2.';
       $name = $name . $file->getClientOriginalExtension();;
       $imagePath2 = 'user-program-task/' .  $request->user_program_task_id . '/' . $name;
-      Storage::disk('local')->put($imagePath2, file_get_contents($file), 'public');
+      Storage::disk('s3')->put($imagePath2, file_get_contents($file), 'public');
 
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
       $userProgramTask->imagepath2 = $imagePath2;
@@ -117,7 +117,7 @@ class UploadsController extends Controller
       $name = $request->filename ?? 'imagepath3.';
       $name = $name . $file->getClientOriginalExtension();;
       $imagePath3 = 'user-program-task/' .  $request->user_program_task_id . '/' . $name;
-      Storage::disk('local')->put($imagePath3, file_get_contents($file), 'public');
+      Storage::disk('s3')->put($imagePath3, file_get_contents($file), 'public');
 
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
       $userProgramTask->imagepath3 = $imagePath3;
@@ -131,7 +131,7 @@ class UploadsController extends Controller
       $name = $request->filename ?? 'imagepath4.';
       $name = $name . $file->getClientOriginalExtension();;
       $imagePath4 = 'user-program-task/' .  $request->user_program_task_id . '/' . $name;
-      Storage::disk('local')->put($imagePath4, file_get_contents($file), 'public');
+      Storage::disk('s3')->put($imagePath4, file_get_contents($file), 'public');
 
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
       $userProgramTask->imagepath4 = $imagePath4;
