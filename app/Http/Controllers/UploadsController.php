@@ -21,8 +21,8 @@ class UploadsController extends Controller
       $file = $request->file('imagepath');
       $name = $request->filename ?? 'photo.';
       $name = $name . $file->getClientOriginalExtension();;
-      $imagePath = 'users/' .  $request->userid . '/' . $name;
-      Storage::disk('local')->put($imagePath, file_get_contents($file), 'public');
+      $imagePath = 'lbsm/users/' .  $request->userid . '/' . $name;
+      Storage::disk('s3')->put($imagePath, file_get_contents($file), 'public');
 
       $user = User::where('id', '=', request()->userid)->first();
       $user->image_path = $imagePath;
@@ -57,7 +57,7 @@ class UploadsController extends Controller
       $file = $request->file('document_path');
       $name = $request->filename ?? 'photo.';
       $name = $name . $file->getClientOriginalExtension();;
-      $documentImagePath = 'user-program-task-documents/' .  $request->id . '/' . $name;
+      $documentImagePath = 'lbsm/user-program-task-documents/' .  $request->id . '/' . $name;
       Storage::disk('local')->put($documentImagePath, file_get_contents($file), 'public');
 
       $group = UserProgramTaskDocument::where('id', '=', request()->id)->first();
@@ -90,7 +90,7 @@ class UploadsController extends Controller
       $file = $request->file('imagepath1');
       $name = $request->filename ?? 'imagepath1.';
       $name = $name . $file->getClientOriginalExtension();;
-      $imagePath1 = 'user-program-task/' .  $request->user_program_task_id . '/' . $name;
+      $imagePath1 = 'lbsm/user-program-task/' .  $request->user_program_task_id . '/' . $name;
       Storage::disk('local')->put($imagePath1, file_get_contents($file), 'public');
 
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
