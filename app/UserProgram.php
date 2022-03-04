@@ -9,6 +9,7 @@ class UserProgram extends Model
     protected $fillable = [
         'user_id',
         'program_id',
+        'active',
         'enrollment_date',
     ];
 
@@ -22,7 +23,7 @@ class UserProgram extends Model
     }
     public function program()
     {
-        return $this->belongsTo(Program::class);
+        return $this->belongsTo(Program::class)->with('program_tasks');
     }
     public function user_program_tasks()
     {

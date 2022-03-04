@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Program;
+use App\ProgramTask;
 use App\UserProgram;
+use App\UserProgramPost;
 use App\UserProgramTask;
 use App\Value;
 use Illuminate\Http\Request;
@@ -36,19 +38,26 @@ class UserProgramTasksController extends Controller
         $count_program_tasks = 0;
         $user_program_tasks = $userProgram->user_program_tasks;
         $count = $user_program_tasks->count();
-        $count_program_tasks = $user_program_tasks[0]->program->program_tasks->count();
-        // return $count_program_tasks;
+
+        $user_id = request()->user_id;
+        $Current_user_program_post = UserProgramPost::where('user_id', '=', $user_id)->latest()->first();
+        $program_post_id = $Current_user_program_post->program_post_id;
+        $count_program_tasks = ProgramTask::where('program_post_id', '=', $program_post_id)->get()->count();
+
+        $user_ships = $user_ships = request()->site->user_ships()
+            ->where('user_id', '=', $user_id)->get();
+
         $total_completed_task = 0;
         $total_pending_task = 0;
         $total_pending_program_tasks = 0;
         $total_marks_obtained = 0;
         $average_score = 0;
+        $final_total_completed_task = 0;
+        $final_total_pending_task = 0;
+        $Final_average_score = 0;
+        $final_total_marks_obtained = 0;
+        $final_total_pending_program_tasks = 0;
         foreach ($user_program_tasks as $key => $value) {
-            $final_total_completed_task = 0;
-            $final_total_pending_task = 0;
-            $Final_average_score = 0;
-            $final_total_marks_obtained = 0;
-            $final_total_pending_program_tasks = 0;
             // $count_is_completed = $value->is_completed;
             if ($value->is_completed == 1) {
                 $total_completed_task += $value->is_completed;
@@ -66,7 +75,7 @@ class UserProgramTasksController extends Controller
             $Final_average_score = $average_score;
 
             $final_total_pending_program_tasks = $count_program_tasks - $final_total_completed_task;
-            
+
             // $user_program_tasks[] = $user_program_tasks;
         }
 
@@ -85,7 +94,8 @@ class UserProgramTasksController extends Controller
             'average_score'     =>  $average_score,
             'total_marks_obtained'     =>  $total_marks_obtained,
             'total_pending_program_tasks'     =>  $total_pending_program_tasks,
-            'count'    =>   $count
+            'count'    =>   $count,
+            'user_ships' => $user_ships,
         ], 200);
     }
 
@@ -111,11 +121,11 @@ class UserProgramTasksController extends Controller
 
     public function show(UserProgram $userProgram, UserProgramTask $userProgramTask)
     {
-        $userProgramTask->userProgram = $userProgram;
-        $userProgramTask->user = $userProgramTask->user;
-        $userProgramTask->program = $userProgramTask->program;
-        $userProgramTask->program_task = $userProgramTask->program_task;
-        $userProgramTask->ship = $userProgramTask->ship;
+        // $userProgramTask->userProgram = $userProgram;
+        // $userProgramTask->user = $userProgramTask->user;
+        // $userProgramTask->program = $userProgramTask->program;
+        // $userProgramTask->program_task = $userProgramTask->program_task;
+        // $userProgramTask->ship = $userProgramTask->ship;
         return response()->json([
             'data'   =>  $userProgramTask,
             'success' =>  true
@@ -129,6 +139,8 @@ class UserProgramTasksController extends Controller
      */
     public function update(Request $request, UserProgram $userProgram, UserProgramTask $userProgramTask)
     {
+        // return 1;
+        // return $userProgramTask;
         $userProgramTask->update($request->all());
 
         return response()->json([

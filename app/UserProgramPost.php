@@ -11,22 +11,25 @@ class UserProgramPost extends Model
         'program_id',
         'program_post_id',
         'promotion_date',
+        'active',
         'remarks',
     ];
 
-    public function site() {
+    public function site()
+    {
         return $this->belongsTo(Site::class);
     }
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function program() {
+    public function program()
+    {
         return $this->belongsTo(Program::class);
     }
-    public function program_post() {
+    public function program_post()
+    {
         return $this->belongsTo(ProgramPost::class)
-        ->with('post');
+            ->with('post');
     }
-
-
 }

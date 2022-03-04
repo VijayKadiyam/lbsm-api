@@ -485,22 +485,32 @@ class AnalyticsController extends Controller
     {
         $year = request()->year;
         $type = request()->type;
-        $total_task = UserProgramTask::where('is_completed', '=', true);
+        $total_task = request()->site->user_program_tasks()
+            ->where('is_completed', '=', true);
+        // $total_task = UserProgramTask::where('is_completed', '=', true);
         // $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         if (request()->rank) {
-            $user_program_ids = [];
+            // $user_program_ids = [];
             $rank_id = request()->rank;
-            // Rank Wise All Program Post
-            $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
-            foreach ($AllProgramPost as $key => $program_post) {
-                // Program Wise All UserProgram 
-                $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
-                foreach ($AllUserProgram as $key => $user_program) {
-                    // User Program Wise All UserProgramTask
-                    $user_program_ids[] = $user_program->id;
-                }
-            }
-            $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
+            // // Rank Wise All Program Post
+            // $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
+            // foreach ($AllProgramPost as $key => $program_post) {
+            //     // Program Wise All UserProgram 
+            //     $AllUserProgram = UserProgram::where('program_id', '=', $program_post->program_id)->get();
+            //     foreach ($AllUserProgram as $key => $user_program) {
+            //         // User Program Wise All UserProgramTask
+            //         $user_program_ids[] = $user_program->id;
+            //     }
+            // }
+            // $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
+            // return $total_task->get();
+            // return $total_task->get();
+            // Fetch All User By rank_id
+            // $user_programs = [];
+            $total_task = $total_task->whereHas('user',  function ($q) use ($rank_id) {
+                $q->where('rank_id', '=', $rank_id);
+                $q->where('active', '=', true);
+            });
         }
         $total_task = $total_task->get();
         // return $total_task;
@@ -534,7 +544,7 @@ class AnalyticsController extends Controller
             $average = $total_marks / $tasks_performed;
             $user['task_perfomed'] = $tasks_performed;
             $user['total_marks'] = $total_marks;
-            $user['average'] = $average;
+            $user['average'] = number_format((float)$average, 1, '.', '');
             $u[] = $user;
         }
 

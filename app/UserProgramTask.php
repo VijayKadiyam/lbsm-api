@@ -21,6 +21,7 @@ class UserProgramTask extends Model
         'imagepath4',
         'ship_id',
         'from_date',
+        'active',
         'to_date',
     ];
     public function site()
@@ -29,7 +30,7 @@ class UserProgramTask extends Model
     }
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with('rank');
     }
     public function program()
     {
