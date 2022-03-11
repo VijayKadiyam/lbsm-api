@@ -32,9 +32,9 @@ class KarcoTasksController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-                'department'        =>  'required',
-            ]);
-        
+            'department'        =>  'required',
+        ]);
+
         $karco_task = new KarcoTask($request->all());
         $request->site->karco_tasks()->save($karco_task);
 
@@ -73,7 +73,9 @@ class KarcoTasksController extends Controller
     public function destroy($id)
     {
         $karco_task = KarcoTask::find($id);
-        $karco_task->delete();
+        // $karco_task->delete();
+        $karco_task->is_deleted = true;
+        $karco_task->update();
 
         return response()->json([
             'message' =>  'Deleted'

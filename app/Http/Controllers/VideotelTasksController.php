@@ -71,8 +71,9 @@ class VideotelTasksController extends Controller
 
     public function destroy($id)
     {
-        $videotel_task = VideotelTask::find($id);
-        $videotel_task->delete();
+        $karco_task = VideotelTask::find($id);
+        $karco_task->is_deleted = true;
+        $karco_task->update();
 
         return response()->json([
             'message' =>  'Deleted'

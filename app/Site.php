@@ -13,7 +13,7 @@ class Site extends Model
   public function users()
   {
     return $this->belongsToMany(User::class)
-      ->with('roles', 'sites','rank');
+      ->with('roles', 'sites', 'rank');
   }
 
   public function programs()
@@ -64,7 +64,7 @@ class Site extends Model
   }
   public function karco_tasks()
   {
-    return $this->hasMany(KarcoTask::class)->with('ship','user');
+    return $this->hasMany(KarcoTask::class)->with('ship', 'user')->where('is_deleted', '=', false);
   }
   public function crude_videotel_tasks()
   {
@@ -72,10 +72,10 @@ class Site extends Model
   }
   public function videotel_tasks()
   {
-    return $this->hasMany(VideotelTask::class)->with('ship','user');
+    return $this->hasMany(VideotelTask::class)->with('ship', 'user')->where('is_deleted', '=', false);
   }
   public function user_ships()
   {
-    return $this->hasMany(UserShip::class)->with('ship','user');
+    return $this->hasMany(UserShip::class)->with('ship', 'user');
   }
 }
