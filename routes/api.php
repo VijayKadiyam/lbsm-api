@@ -97,6 +97,7 @@ Route::get('process_karco_task', 'CrudeKarcoTasksController@processKarcoTask');
 Route::get('truncate_karco_tasks', 'CrudeKarcoTasksController@truncate');
 
 // KARCO Task
+Route::post('delete_karco_tasks/{id}', 'KarcoTasksController@destroy');
 Route::resource('karco_tasks', 'KarcoTasksController');
 
 // Upload Excell Videotel User
@@ -106,6 +107,7 @@ Route::get('process_videotel_task', 'CrudeVideotelTasksController@processVideote
 Route::get('truncate_videotel_tasks', 'CrudeVideotelTasksController@truncate');
 
 // Videotel Task
+Route::post('delete_videotel_tasks/{id}', 'VideotelTasksController@destroy');
 Route::resource('videotel_tasks', 'VideotelTasksController');
 
 // User ship 

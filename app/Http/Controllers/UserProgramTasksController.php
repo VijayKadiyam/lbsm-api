@@ -35,11 +35,12 @@ class UserProgramTasksController extends Controller
     {
         // return 1;
         $count = 0;
+        $user_id = request()->user_id;
         $count_program_tasks = 0;
+        // $user_program_tasks = [];
         $user_program_tasks = $userProgram->user_program_tasks;
         $count = $user_program_tasks->count();
 
-        $user_id = request()->user_id;
         $Current_user_program_post = UserProgramPost::where('user_id', '=', $user_id)->latest()->first();
         $program_post_id = $Current_user_program_post->program_post_id;
         $count_program_tasks = ProgramTask::where('program_post_id', '=', $program_post_id)->get()->count();
@@ -58,6 +59,7 @@ class UserProgramTasksController extends Controller
         $final_total_marks_obtained = 0;
         $final_total_pending_program_tasks = 0;
         foreach ($user_program_tasks as $key => $value) {
+            // return $value;
             // $count_is_completed = $value->is_completed;
             if ($value->is_completed == 1) {
                 $total_completed_task += $value->is_completed;

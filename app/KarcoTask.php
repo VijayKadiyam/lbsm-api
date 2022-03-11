@@ -22,6 +22,7 @@ class KarcoTask extends Model
         'done_on',
         'due_days',
         'assessment_status',
+        'is_deleted',
     ];
 
     public function site()
