@@ -46,20 +46,20 @@ class AnalyticsController extends Controller
     public function userCounts()
     {
         if (request()->year != '') {
-            $user_counts = User::whereYear('created_at', '=', request()->year)
-                ->groupBy('rank')
+            // $user_counts = User::whereYear('created_at', '=', request()->year)
+            $user_counts = User::groupBy('rank')
                 ->select('rank', DB::raw('count(id) as userCount'))
                 ->get();
 
-            $program_counts = Program::whereYear('created_at', '=', request()->year)
+            // $program_counts = Program::whereYear('created_at', '=', request()->year)
+            $program_counts = Program::get()->count();
+
+            // $total_task_completed_counts = UserProgramTask::whereYear('completion_date', '=', request()->year)
+            $total_task_completed_counts = UserProgramTask::where('is_completed', '=', true)
                 ->get()->count();
 
-            $total_task_completed_counts = UserProgramTask::whereYear('completion_date', '=', request()->year)
-                ->where('is_completed', '=', true)
-                ->get()->count();
-
-            $inActive_user_counts = User::whereYear('created_at', '=', request()->year)
-                ->where('active', '=', false)
+            // $inActive_user_counts = User::whereYear('created_at', '=', request()->year)
+            $inActive_user_counts = User::where('active', '=', false)
                 ->get()->count();
         }
 

@@ -15,7 +15,14 @@ class VideotelTasksController extends Controller
     public function index(Request $request)
     {
         $count = 0;
-        $videotel_tasks = request()->site->videotel_tasks;
+        $videotel_tasks = request()->site->videotel_tasks();
+        if ($request->month) {
+            $videotel_tasks = $videotel_tasks->whereMonth('date', '=', $request->month);
+        }
+        if ($request->year) {
+            $videotel_tasks = $videotel_tasks->whereYear('date', '=', $request->year);
+        }
+        $videotel_tasks = $videotel_tasks->get();
         $count = $videotel_tasks->count();
         return response()->json([
             'data'     =>  $videotel_tasks,

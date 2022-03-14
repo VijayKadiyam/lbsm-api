@@ -15,8 +15,17 @@ class KarcoTasksController extends Controller
 
     public function index(Request $request)
     {
+        // return $request->month. ' ' . $request->year;
         $count = 0;
-        $karco_tasks = request()->site->karco_tasks;
+        $karco_tasks = request()->site->karco_tasks();
+        if ($request->month) {
+            $karco_tasks = $karco_tasks->whereMonth('done_on', '=', $request->month);
+            // return $karco_tasks;
+        }
+        if ($request->year) {
+            $karco_tasks = $karco_tasks->whereYear('done_on', '=', $request->year);
+        }
+        $karco_tasks = $karco_tasks->get();
         $count = $karco_tasks->count();
         return response()->json([
             'data'     =>  $karco_tasks,
