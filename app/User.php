@@ -283,4 +283,8 @@ class User extends Authenticatable
   {
     return $this->hasMany(UserShip::class);
   }
+  public function user_i_tests()
+  {
+    return $this->hasMany(UserITest::class);
+  }
 }

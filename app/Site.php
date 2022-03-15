@@ -78,4 +78,8 @@ class Site extends Model
   {
     return $this->hasMany(UserShip::class)->with('ship', 'user');
   }
+  public function user_i_tests()
+  {
+    return $this->hasMany(UserITest::class)->with('user');
+  }
 }

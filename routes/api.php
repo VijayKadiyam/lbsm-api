@@ -113,3 +113,6 @@ Route::resource('videotel_tasks', 'VideotelTasksController');
 // User ship 
 Route::get('user_ships/masters', 'UserShipsController@masters');
 Route::resource('user_ships', 'UserShipsController');
+
+// User I Test
+Route::resource('user_i_tests', 'UserITestsController');
