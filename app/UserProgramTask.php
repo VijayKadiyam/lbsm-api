@@ -23,6 +23,7 @@ class UserProgramTask extends Model
         'from_date',
         'active',
         'to_date',
+        'remark',
     ];
     public function site()
     {
