@@ -75,6 +75,7 @@ Route::resource('programs/{program}/program_tasks', 'ProgramTasksController');
 
 Route::post('program_tasks/filter', 'ProgramTasksController@filter');
 Route::resource('program_tasks', 'ProgramTasksController');
+Route::post('user_programs/delete_image', 'UserProgramTasksController@DeleteImage');
 Route::get('user_program_tasks/masters', 'UserProgramTasksController@masters');
 Route::resource('user_programs/{user_program}/user_program_tasks', 'UserProgramTasksController');
 Route::post('upload_user_program_task_images', 'UploadsController@uploadUserProgramTaskImagePath');

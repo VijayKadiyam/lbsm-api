@@ -159,4 +159,17 @@ class UserProgramTasksController extends Controller
             'message' =>  'Deleted'
         ], 204);
     }
+
+    public function DeleteImage()
+    {
+        $field = request()->imageField;
+        $UserProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)
+            ->where($field, '=', request()->imageName)->first();
+        $UserProgramTask->$field = null;
+        $UserProgramTask->update();
+        // return $UserProgramTask;
+        return response()->json([
+            'message' =>  'Deleted'
+        ], 204);
+    }
 }
