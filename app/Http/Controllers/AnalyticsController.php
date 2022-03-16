@@ -90,7 +90,7 @@ class AnalyticsController extends Controller
 
         $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         $total_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed');
-        $total_videotel_tasks = VideotelTask::whereYear('date', '=', $year);
+        $total_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%');
 
         if (request()->ship) {
             $ships = explode(',', request()->ship);
