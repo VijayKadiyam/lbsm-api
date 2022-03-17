@@ -544,7 +544,9 @@ class AnalyticsController extends Controller
             $average = $total_marks / $tasks_performed;
             $user['task_perfomed'] = $tasks_performed;
             $user['total_marks'] = $total_marks;
-            $user['average'] = number_format((float)$average, 1, '.', '');
+            $round_average = round($average, 1);
+            $user['average_x10'] = $round_average * 10;
+            $user['average'] = $round_average;
             $u[] = $user;
         }
 
@@ -558,13 +560,59 @@ class AnalyticsController extends Controller
             $filter_type = 'Marks';
             // Sorting Descending by Average
             usort($u, function ($a, $b) {
-                return $b['average'] - $a['average'];
+                return $b['average_x10'] - $a['average_x10'];
             });
         }
         return response()->json([
             'data'     =>  $u,
             'user_count'     =>  sizeof($u),
             'filter_type' => $filter_type
+        ], 200);
+    }
+
+    public function kpiData()
+    {
+        $kpi_CPP_count = 0;
+        $kpi_karco_tasks_count = 0;
+        $kpi_videotel_tasks_count = 0;
+        $total = 100;
+        $total_cpp = 20;
+
+        $kpi_CPP = UserProgramTask::where('is_completed', '=', true);
+        $kpi_karco_tasks = KarcoTask::where('assessment_status', '=', 'Completed');
+        $kpi_videotel_tasks = VideotelTask::where('score', '=', '100%');
+
+        if (request()->from_date && request()->to_date) {
+            // If Date Filter
+            $from_date = request()->from_date;
+            $to_date = request()->to_date;
+        } else {
+            // Period Filter
+            $period = request()->period;
+            $from_date = Carbon::now()->subDays($period);
+            $to_date = Carbon::now();
+        }
+        // return 'from_date -'.$from_date. ' - to_date'. $to_date;
+        $kpi_CPP = $kpi_CPP->whereBetween('completion_date', [$from_date, $to_date]);
+        $kpi_karco_tasks = $kpi_karco_tasks->whereBetween('done_on', [$from_date, $to_date]);
+        $kpi_videotel_tasks = $kpi_videotel_tasks->whereBetween('date', [$from_date, $to_date]);
+
+        $kpi_CPP = $kpi_CPP->get();
+        $kpi_karco_tasks = $kpi_karco_tasks->get();
+        $kpi_videotel_tasks = $kpi_videotel_tasks->get();
+        $kpi_CPP_count = $kpi_CPP->count();
+        $kpi_karco_tasks_count = $kpi_karco_tasks->count();
+        $kpi_videotel_tasks_count = $kpi_videotel_tasks->count();
+
+        $CPP_percentage = ($kpi_CPP_count / 100) * $total_cpp;
+        $KARCO_percentage = ($kpi_karco_tasks_count / 100) * $total;
+        $VIDEOTEL_percentage = ($kpi_videotel_tasks_count / 100) * $total;
+
+        return response()->json([
+            'kpi_CPP_count'     =>  $CPP_percentage,
+            'kpi_karco_tasks_count' => $KARCO_percentage,
+            'kpi_videotel_tasks_count' => $VIDEOTEL_percentage,
+            'success' => true
         ], 200);
     }
 }

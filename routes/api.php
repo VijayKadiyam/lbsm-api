@@ -90,6 +90,7 @@ Route::get('total_tasks_performed', 'AnalyticsController@total_tasks_performed')
 Route::get('top_performers_by_average', 'AnalyticsController@top_performers_by_Average');
 Route::get('top_performers_by_task', 'AnalyticsController@top_performers_by_Task');
 Route::get('top_performers', 'AnalyticsController@top_performers');
+Route::get('kpi_data', 'AnalyticsController@kpiData');
 
 // Upload Excell KARCO User
 Route::get('crude_karco_tasks', 'CrudeKarcoTasksController@index');
