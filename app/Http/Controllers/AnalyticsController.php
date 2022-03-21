@@ -51,15 +51,23 @@ class AnalyticsController extends Controller
                 ->select('rank', DB::raw('count(id) as userCount'))
                 ->get();
 
+            // $user_counts = request()->site->users()->with('rank')
+            // ->whereHas('rank',  function ($q) {
+            //     $q->select('code', DB::raw('count(`id`) as userCount'))->groupBy('code');
+            // })->get();
+
+            
+            // return $user_counts;
+
             // $program_counts = Program::whereYear('created_at', '=', request()->year)
-            $program_counts = Program::get()->count();
+            $program_counts = request()->site->programs()->get()->count();
 
             // $total_task_completed_counts = UserProgramTask::whereYear('completion_date', '=', request()->year)
-            $total_task_completed_counts = UserProgramTask::where('is_completed', '=', true)
+            $total_task_completed_counts = request()->site->user_program_tasks()->where('is_completed', '=', true)
                 ->get()->count();
 
             // $inActive_user_counts = User::whereYear('created_at', '=', request()->year)
-            $inActive_user_counts = User::where('active', '=', false)
+            $inActive_user_counts = request()->site->users()->where('active', '=', false)
                 ->get()->count();
         }
 
