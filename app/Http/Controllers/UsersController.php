@@ -146,4 +146,19 @@ class UsersController extends Controller
       'success' =>  true
     ], 200);
   }
+
+  public function userReports(Request $request)
+  {
+    $role = 3;
+    $users = [];
+    $users = $users = $request->site->user_Reposrts()->where('users.id', '=', request()->user_id)->with('roles')
+      ->whereHas('roles',  function ($q) {
+        $q->where('name', '!=', 'Admin');
+        $q->where('name', '!=', 'Main Admin');
+      })->latest()->get();
+
+    return response()->json([
+      'data'  =>  $users
+    ], 200);
+  }
 }

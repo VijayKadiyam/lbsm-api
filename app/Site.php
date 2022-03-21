@@ -16,6 +16,12 @@ class Site extends Model
       ->with('roles', 'sites', 'rank');
   }
 
+  public function user_Reposrts()
+  {
+    return $this->belongsToMany(User::class)
+      ->with('roles', 'sites', 'rank', 'user_programs', 'user_program_posts', 'user_program_tasks', 'user_ships');
+  }
+
   public function programs()
   {
     return $this->hasMany(Program::class)->with('program_posts');

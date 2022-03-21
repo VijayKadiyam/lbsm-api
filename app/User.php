@@ -123,106 +123,7 @@ class User extends Authenticatable
     return $this->permissions ? in_array($permission, $this->permissions->pluck('id')->toArray()) : false;
   }
 
-  public function user_educations()
-  {
-    return $this->hasMany(UserEducation::class)
-      ->with('qualification');
-  }
 
-  public function user_passports()
-  {
-    return $this->hasMany(UserPassport::class);
-  }
-  public function user_salaries()
-  {
-    return $this->hasMany(UserSalary::class)
-      ->latest();
-  }
-  public function user_family_details()
-  {
-    return $this->hasMany(UserFamilyDetail::class);
-  }
-
-  public function user_assets()
-  {
-    return $this->hasMany(UserAsset::class)
-      ->with('asset_type', 'asset');
-  }
-
-  public function user_visas()
-  {
-    return $this->hasMany(UserVisa::class)
-      ->with('country', 'visa_type');
-  }
-
-  public function user_addresses()
-  {
-    return $this->hasMany(UserAddress::class)
-      ->with('address_type', 'state', 'country');
-  }
-
-  public function user_identities()
-  {
-    return $this->hasMany(UserIdentity::class)
-      ->with('document_type');
-  }
-
-  public function user_categories()
-  {
-    return $this->hasMany(UserCategory::class)
-      ->with('category', 'category_list')
-      ->latest();
-  }
-
-  public function user_experiences()
-  {
-    return $this->hasMany(UserExperience::class);
-  }
-  public function user_access_cards()
-  {
-    return $this->hasMany(UserAccessCard::class);
-  }
-
-  public function user_documents()
-  {
-    return $this->hasMany(UserDocument::class);
-  }
-
-  public function user_punches()
-  {
-    return $this->hasMany(UserPunch::class);
-  }
-
-  public function user_daily_summaries()
-  {
-    return $this->hasMany(UserDailySummary::class)
-      ->with('daily_task');
-  }
-
-  public function blood_group()
-  {
-    return $this->belongsTo(ValueList::class);
-  }
-
-  public function marital_status()
-  {
-    return $this->belongsTo(ValueList::class);
-  }
-
-  public function nationality()
-  {
-    return $this->belongsTo(ValueList::class);
-  }
-
-  public function residential_status()
-  {
-    return $this->belongsTo(ValueList::class);
-  }
-
-  public function country_origin()
-  {
-    return $this->belongsTo(ValueList::class);
-  }
   public function rank()
   {
     return $this->belongsTo(ValueList::class);
@@ -243,48 +144,39 @@ class User extends Authenticatable
     return $this->belongsTo(ValueList::class);
   }
 
-  public function bank_name()
-  {
-    return $this->belongsTo(Bank::class);
-  }
-
-  public function bank_branch()
-  {
-    return $this->belongsTo(BankBranch::class);
-  }
-
-  public function bank_acc_type()
-  {
-    return $this->belongsTo(ValueList::class);
-  }
-
-  public function bank_payment_type()
-  {
-    return $this->belongsTo(ValueList::class);
-  }
 
   public function user_programs()
   {
-    return $this->hasMany(UserProgram::class);
+    return $this->hasMany(UserProgram::class)->with('program');
   }
+
   public function user_program_posts()
   {
-    return $this->hasMany(UserProgramPost::class);
+    return $this->hasMany(UserProgramPost::class)->with('program_post.post');
   }
+
+  public function user_program_tasks()
+  {
+    return $this->hasMany(UserProgramTask::class)->with('program_task');
+  }
+
+  public function user_ships()
+  {
+    return $this->hasMany(UserShip::class)->with('ship');
+  }
+
+  public function user_i_tests()
+  {
+    return $this->hasMany(UserITest::class);
+  }
+
   public function karco_tasks()
   {
     return $this->hasMany(KarcoTask::class);
   }
+
   public function videotel_tasks()
   {
     return $this->hasMany(VideotelTask::class);
-  }
-  public function user_ships()
-  {
-    return $this->hasMany(UserShip::class);
-  }
-  public function user_i_tests()
-  {
-    return $this->hasMany(UserITest::class);
   }
 }
