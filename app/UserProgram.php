@@ -22,7 +22,7 @@ class UserProgram extends Model
     }
     public function program()
     {
-        return $this->belongsTo(Program::class)->with('program_tasks');
+        return $this->belongsTo(Program::class);
     }
     public function user_program_tasks()
     {
