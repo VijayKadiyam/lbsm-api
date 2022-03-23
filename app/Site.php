@@ -16,10 +16,10 @@ class Site extends Model
       ->with('roles', 'sites', 'rank');
   }
 
-  public function user_Reposrts()
+  public function user_Reports()
   {
     return $this->belongsToMany(User::class)
-      ->with('roles', 'sites', 'rank', 'user_programs', 'user_program_posts', 'user_program_tasks', 'user_ships');
+      ->with('roles', 'sites', 'rank', 'user_programs', 'karco_tasks_report', 'user_program_tasks', 'videotel_tasks_report');
   }
 
   public function programs()
