@@ -157,7 +157,7 @@ class User extends Authenticatable
 
   public function user_program_tasks()
   {
-    return $this->hasMany(UserProgramTask::class)->with('program_task');
+    return $this->hasMany(UserProgramTask::class)->with('program_task', 'ship');
   }
 
   public function user_ships()
@@ -178,5 +178,14 @@ class User extends Authenticatable
   public function videotel_tasks()
   {
     return $this->hasMany(VideotelTask::class);
+  }
+  public function karco_tasks_report()
+  {
+    return $this->hasMany(KarcoTask::class)->where('assessment_status', '=', 'Completed')->with('ship');
+  }
+
+  public function videotel_tasks_report()
+  {
+    return $this->hasMany(VideotelTask::class)->where('score', '=', '100%')->with('ship');
   }
 }

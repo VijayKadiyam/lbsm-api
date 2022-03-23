@@ -151,12 +151,14 @@ class UsersController extends Controller
   {
     $role = 3;
     $users = [];
-    $users = $users = $request->site->user_Reposrts()->where('users.id', '=', request()->user_id)->with('roles')
+    $users = $request->site->user_Reports()->where('users.id', '=', request()->user_id)
+      ->with('roles')
       ->whereHas('roles',  function ($q) {
         $q->where('name', '!=', 'Admin');
         $q->where('name', '!=', 'Main Admin');
-      })->latest()->get();
-
+      });
+    $users = $users->latest()->get();
+    
     return response()->json([
       'data'  =>  $users
     ], 200);

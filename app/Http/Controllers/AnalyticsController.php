@@ -133,6 +133,7 @@ class AnalyticsController extends Controller
         }
         $total_task = $total_task->get();
         $total_karco_tasks = $total_karco_tasks->get();
+        // return $total_karco_tasks->count();
         $total_videotel_tasks = $total_videotel_tasks->get();
 
         foreach ($total_task as $key => $task) {
@@ -580,15 +581,16 @@ class AnalyticsController extends Controller
 
     public function kpiData()
     {
+        $year = request()->year;
         $kpi_CPP_count = 0;
         $kpi_karco_tasks_count = 0;
         $kpi_videotel_tasks_count = 0;
         $total = 100;
         $total_cpp = 20;
 
-        $kpi_CPP = UserProgramTask::where('is_completed', '=', true);
-        $kpi_karco_tasks = KarcoTask::where('assessment_status', '=', 'Completed');
-        $kpi_videotel_tasks = VideotelTask::where('score', '=', '100%');
+        $kpi_CPP = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
+        $kpi_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed');
+        $kpi_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%');
 
         if (request()->from_date && request()->to_date) {
             // If Date Filter
@@ -609,15 +611,18 @@ class AnalyticsController extends Controller
         $kpi_karco_tasks = $kpi_karco_tasks->get();
         $kpi_videotel_tasks = $kpi_videotel_tasks->get();
         $kpi_CPP_count = $kpi_CPP->count();
-        $kpi_karco_tasks_count = $kpi_karco_tasks->count();
+        $kpi_karco_tasks_count = $kpi_karco_tasks->sum('no_of_video_watched');
         $kpi_videotel_tasks_count = $kpi_videotel_tasks->count();
 
-        $CPP_percentage = ($kpi_CPP_count / 100) * $total_cpp;
+        
+        $CPP_percentage = ($kpi_CPP_count / $total_cpp) * $total;
         $KARCO_percentage = ($kpi_karco_tasks_count / 100) * $total;
         $VIDEOTEL_percentage = ($kpi_videotel_tasks_count / 100) * $total;
 
+        // return 'Cpp'.$CPP_percentage . 'kaco' . $KARCO_percentage . 'videotel' . $VIDEOTEL_percentage. 'Cpp'.$kpi_CPP_count . 'kaco' . $kpi_karco_tasks_count . 'videotel' . $kpi_videotel_tasks_count;
+
         return response()->json([
-            'kpi_CPP_count'     =>  $CPP_percentage,
+            'kpi_CPP_count'     =>  round($CPP_percentage),
             'kpi_karco_tasks_count' => $KARCO_percentage,
             'kpi_videotel_tasks_count' => $VIDEOTEL_percentage,
             'success' => true
