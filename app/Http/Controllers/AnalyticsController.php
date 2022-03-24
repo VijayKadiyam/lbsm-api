@@ -56,7 +56,7 @@ class AnalyticsController extends Controller
             //     $q->select('code', DB::raw('count(`id`) as userCount'))->groupBy('code');
             // })->get();
 
-            
+
             // return $user_counts;
 
             // $program_counts = Program::whereYear('created_at', '=', request()->year)
@@ -614,7 +614,7 @@ class AnalyticsController extends Controller
         $kpi_karco_tasks_count = $kpi_karco_tasks->sum('no_of_video_watched');
         $kpi_videotel_tasks_count = $kpi_videotel_tasks->count();
 
-        
+
         $CPP_percentage = ($kpi_CPP_count / $total_cpp) * $total;
         $KARCO_percentage = ($kpi_karco_tasks_count / 100) * $total;
         $VIDEOTEL_percentage = ($kpi_videotel_tasks_count / 100) * $total;
@@ -625,6 +625,9 @@ class AnalyticsController extends Controller
             'kpi_CPP_count'     =>  round($CPP_percentage),
             'kpi_karco_tasks_count' => $KARCO_percentage,
             'kpi_videotel_tasks_count' => $VIDEOTEL_percentage,
+            'kpi_CPP'     =>  $kpi_CPP_count,
+            'kpi_karco_tasks' => $kpi_karco_tasks_count,
+            'kpi_videotel_tasks' => $kpi_videotel_tasks_count,
             'success' => true
         ], 200);
     }
