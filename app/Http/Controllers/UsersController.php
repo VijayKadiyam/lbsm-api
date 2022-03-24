@@ -120,6 +120,7 @@ class UsersController extends Controller
     $user->roles = $user->roles;
     $user->sites = $user->sites;
     $user->rank = $user->rank;
+    $user->user_program_posts = $user->user_program_posts;
 
     return response()->json([
       'data'  =>  $user,

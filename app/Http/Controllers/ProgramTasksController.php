@@ -29,14 +29,25 @@ class ProgramTasksController extends Controller
 
     public function filter(Request $request)
     {
-        $user_id=$request->user_id;
-        $Current_user_program_post=UserProgramPost::where('user_id','=',$user_id)->latest()->first();
-        $program_post_id= $Current_user_program_post->program_post_id;
-        $ProgramTasks=ProgramTask::where('program_post_id','=',$program_post_id)->get();
+        $user_id = $request->user_id;
+        // $Current_user_program_post=UserProgramPost::where('user_id','=',$user_id)->latest()->first();
+        // $program_post_id= $Current_user_program_post->program_post_id;
+        // $ProgramTasks=ProgramTask::where('program_post_id','=',$program_post_id)->get();
+        $user_program_posts = UserProgramPost::where('user_id', '=', $user_id)->get();
+        // return $user_program_posts;
+        $ProgramTasks =[];
+        foreach ($user_program_posts as $key => $user_program_post) {
+            $program_post_id = $user_program_post->program_post_id;
+            // return $program_post_id ;
+            $abc = ProgramTask::where('program_post_id', '=', $program_post_id)->get();
+            $ProgramTasks[] = $abc;
+        }    
+        
+        // return $ProgramTasks;
         return response()->json([
             'data'   =>  $ProgramTasks,
             'success' =>  true
-        ], 200); 
+        ], 200);
     }
     /*
      * To store a new programTask

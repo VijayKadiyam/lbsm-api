@@ -13,7 +13,7 @@ class Site extends Model
   public function users()
   {
     return $this->belongsToMany(User::class)
-      ->with('roles', 'sites', 'rank');
+      ->with('roles', 'sites', 'rank', 'user_program_posts');
   }
 
   public function user_Reports()
@@ -29,7 +29,7 @@ class Site extends Model
 
   public function program_posts()
   {
-    return $this->hasMany(ProgramPost::class);
+    return $this->hasMany(ProgramPost::class)->with('program_tasks');
   }
 
   public function user_programs()

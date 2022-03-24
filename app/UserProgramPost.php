@@ -30,6 +30,6 @@ class UserProgramPost extends Model
     public function program_post()
     {
         return $this->belongsTo(ProgramPost::class)
-            ->with('post');
+            ->with('post', 'program_tasks');
     }
 }
