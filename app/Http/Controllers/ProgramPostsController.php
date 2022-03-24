@@ -23,7 +23,7 @@ class ProgramPostsController extends Controller
         $post = Value::where('name', '=', 'POST')->first();
 
         $posts = [];
-        if($post)
+        if ($post)
             $posts = ValueList::where('value_id', '=', $post->id)
                 ->get();
 
@@ -95,6 +95,7 @@ class ProgramPostsController extends Controller
 
     public function show(Program $program, ProgramPost $programPost)
     {
+        $programPost->program_tasks = $programPost->program_tasks;
         return response()->json([
             'data'   =>  $programPost,
             'success' =>  true
