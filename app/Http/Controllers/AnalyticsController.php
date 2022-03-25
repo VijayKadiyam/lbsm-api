@@ -623,8 +623,8 @@ class AnalyticsController extends Controller
 
         return response()->json([
             'kpi_CPP_count'     =>  round($CPP_percentage),
-            'kpi_karco_tasks_count' => $KARCO_percentage,
-            'kpi_videotel_tasks_count' => $VIDEOTEL_percentage,
+            'kpi_karco_tasks_count' => round($KARCO_percentage),
+            'kpi_videotel_tasks_count' => round($VIDEOTEL_percentage),
             'kpi_CPP'     =>  $kpi_CPP_count,
             'kpi_karco_tasks' => $kpi_karco_tasks_count,
             'kpi_videotel_tasks' => $kpi_videotel_tasks_count,

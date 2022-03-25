@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\KarcoTask;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
+use App\UserProgramTask;
 use App\Value;
+use App\VideotelTask;
 
 // use App\Value;
 
@@ -150,7 +153,10 @@ class UsersController extends Controller
 
   public function userReports(Request $request)
   {
-    $role = 3;
+    // $from_date = '2022-02-08';
+    // $to_date = '2022-02-10';
+    $from_date = request()->from_date;
+    $to_date = request()->to_date;
     $users = [];
     $users = $request->site->user_Reports()->where('users.id', '=', request()->user_id)
       ->with('roles')
@@ -158,8 +164,28 @@ class UsersController extends Controller
         $q->where('name', '!=', 'Admin');
         $q->where('name', '!=', 'Main Admin');
       });
+
     $users = $users->latest()->get();
-    
+    $kpi_cpp_tasks = UserProgramTask::with('ship', 'program_task')->where('is_completed', '=', true)
+      ->where('user_id', request()->user_id);
+    $kpi_karco_tasks = KarcoTask::with('ship')->where('assessment_status', '=', 'Completed')
+      ->where('user_id', request()->user_id);
+    $kpi_videotel_tasks = VideotelTask::with('ship')->where('score', '=', '100%')
+      ->where('user_id', request()->user_id);
+    if ($from_date && $to_date) {
+      $kpi_cpp_tasks = $kpi_cpp_tasks->whereBetween('completion_date', [$from_date, $to_date]);
+      $kpi_karco_tasks = $kpi_karco_tasks->whereBetween('done_on', [$from_date, $to_date]);
+      $kpi_videotel_tasks = $kpi_videotel_tasks->whereBetween('date', [$from_date, $to_date]);
+    }
+    $kpi_cpp_tasks = $kpi_cpp_tasks->get();
+    $users[0]['cpp_tasks'] = $kpi_cpp_tasks;
+
+    $kpi_karco_tasks = $kpi_karco_tasks->get();
+    $users[0]['karco_tasks'] = $kpi_karco_tasks;
+
+    $kpi_videotel_tasks = $kpi_videotel_tasks->get();
+    $users[0]['videotel_tasks'] = $kpi_videotel_tasks;
+
     return response()->json([
       'data'  =>  $users
     ], 200);
