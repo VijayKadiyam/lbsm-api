@@ -596,11 +596,19 @@ class AnalyticsController extends Controller
             // If Date Filter
             $from_date = request()->from_date;
             $to_date = request()->to_date;
+            $from_month = Carbon::parse($from_date)->format('m');
+            $to_month =  Carbon::parse($to_date)->format('m');
+
+            $final_month = ($to_month - $from_month) + 1;
         } else {
             // Period Filter
             $period = request()->period;
             $from_date = Carbon::now()->subDays($period);
             $to_date = Carbon::now();
+            $from_month = Carbon::parse($from_date)->format('m');
+            $to_month =  Carbon::parse($to_date)->format('m');
+
+            $final_month = ($to_month - $from_month);
         }
         // return 'from_date -'.$from_date. ' - to_date'. $to_date;
         $kpi_CPP = $kpi_CPP->whereBetween('completion_date', [$from_date, $to_date]);
@@ -615,19 +623,26 @@ class AnalyticsController extends Controller
         $kpi_videotel_tasks_count = $kpi_videotel_tasks->count();
 
 
-        $CPP_percentage = ($kpi_CPP_count / $total_cpp) * $total;
-        $KARCO_percentage = ($kpi_karco_tasks_count / 100) * $total;
-        $VIDEOTEL_percentage = ($kpi_videotel_tasks_count / 100) * $total;
+        // return $final_month;
+
+        $cpp = $total_cpp * $final_month;
+        $karco_videotel = $total * $final_month;
+
+        $CPP_percentage = ($kpi_CPP_count / $cpp) * $total;
+        $KARCO_percentage = ($kpi_karco_tasks_count / $karco_videotel) * $total;
+        $VIDEOTEL_percentage = ($kpi_videotel_tasks_count / $karco_videotel) * $total;
 
         // return 'Cpp'.$CPP_percentage . 'kaco' . $KARCO_percentage . 'videotel' . $VIDEOTEL_percentage. 'Cpp'.$kpi_CPP_count . 'kaco' . $kpi_karco_tasks_count . 'videotel' . $kpi_videotel_tasks_count;
 
         return response()->json([
-            'kpi_CPP_count'     =>  round($CPP_percentage),
-            'kpi_karco_tasks_count' => round($KARCO_percentage),
-            'kpi_videotel_tasks_count' => round($VIDEOTEL_percentage),
+            'kpi_CPP_percentage'     =>  round($CPP_percentage),
+            'kpi_karco_tasks_percentage' => round($KARCO_percentage),
+            'kpi_videotel_tasks_percentage' => round($VIDEOTEL_percentage),
             'kpi_CPP'     =>  $kpi_CPP_count,
             'kpi_karco_tasks' => $kpi_karco_tasks_count,
             'kpi_videotel_tasks' => $kpi_videotel_tasks_count,
+            'cpp_out_of' => $cpp,
+            'karco_videotel_out_of' => $karco_videotel,
             'success' => true
         ], 200);
     }
