@@ -35,6 +35,7 @@ Route::resource('assign_permissions', 'AssignPermissionsController');
 Route::resource('unassign_permissions', 'UnAssignPermissionsController');
 
 Route::get('users/masters', 'UsersController@masters');
+Route::get('user_reports', 'UsersController@userReports');
 Route::post('upload_user_image', 'UploadsController@uploadUserImage');
 Route::resource('users', 'UsersController');
 
@@ -75,6 +76,7 @@ Route::resource('programs/{program}/program_tasks', 'ProgramTasksController');
 
 Route::post('program_tasks/filter', 'ProgramTasksController@filter');
 Route::resource('program_tasks', 'ProgramTasksController');
+Route::post('user_programs/delete_image', 'UserProgramTasksController@DeleteImage');
 Route::get('user_program_tasks/masters', 'UserProgramTasksController@masters');
 Route::resource('user_programs/{user_program}/user_program_tasks', 'UserProgramTasksController');
 Route::post('upload_user_program_task_images', 'UploadsController@uploadUserProgramTaskImagePath');
@@ -89,6 +91,7 @@ Route::get('total_tasks_performed', 'AnalyticsController@total_tasks_performed')
 Route::get('top_performers_by_average', 'AnalyticsController@top_performers_by_Average');
 Route::get('top_performers_by_task', 'AnalyticsController@top_performers_by_Task');
 Route::get('top_performers', 'AnalyticsController@top_performers');
+Route::get('kpi_data', 'AnalyticsController@kpiData');
 
 // Upload Excell KARCO User
 Route::get('crude_karco_tasks', 'CrudeKarcoTasksController@index');
@@ -113,3 +116,6 @@ Route::resource('videotel_tasks', 'VideotelTasksController');
 // User ship 
 Route::get('user_ships/masters', 'UserShipsController@masters');
 Route::resource('user_ships', 'UserShipsController');
+
+// User I Test
+Route::resource('user_i_tests', 'UserITestsController');

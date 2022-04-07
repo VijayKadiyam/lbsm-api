@@ -51,15 +51,23 @@ class AnalyticsController extends Controller
                 ->select('rank', DB::raw('count(id) as userCount'))
                 ->get();
 
+            // $user_counts = request()->site->users()->with('rank')
+            // ->whereHas('rank',  function ($q) {
+            //     $q->select('code', DB::raw('count(`id`) as userCount'))->groupBy('code');
+            // })->get();
+
+
+            // return $user_counts;
+
             // $program_counts = Program::whereYear('created_at', '=', request()->year)
-            $program_counts = Program::get()->count();
+            $program_counts = request()->site->programs()->get()->count();
 
             // $total_task_completed_counts = UserProgramTask::whereYear('completion_date', '=', request()->year)
-            $total_task_completed_counts = UserProgramTask::where('is_completed', '=', true)
+            $total_task_completed_counts = request()->site->user_program_tasks()->where('is_completed', '=', true)
                 ->get()->count();
 
             // $inActive_user_counts = User::whereYear('created_at', '=', request()->year)
-            $inActive_user_counts = User::where('active', '=', false)
+            $inActive_user_counts = request()->site->users()->where('active', '=', false)
                 ->get()->count();
         }
 
@@ -90,7 +98,7 @@ class AnalyticsController extends Controller
 
         $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         $total_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed');
-        $total_videotel_tasks = VideotelTask::whereYear('date', '=', $year);
+        $total_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%');
 
         if (request()->ship) {
             $ships = explode(',', request()->ship);
@@ -125,6 +133,7 @@ class AnalyticsController extends Controller
         }
         $total_task = $total_task->get();
         $total_karco_tasks = $total_karco_tasks->get();
+        // return $total_karco_tasks->count();
         $total_videotel_tasks = $total_videotel_tasks->get();
 
         foreach ($total_task as $key => $task) {
@@ -544,7 +553,9 @@ class AnalyticsController extends Controller
             $average = $total_marks / $tasks_performed;
             $user['task_perfomed'] = $tasks_performed;
             $user['total_marks'] = $total_marks;
-            $user['average'] = number_format((float)$average, 1, '.', '');
+            $round_average = round($average, 1);
+            $user['average_x10'] = $round_average * 10;
+            $user['average'] = $round_average;
             $u[] = $user;
         }
 
@@ -558,13 +569,81 @@ class AnalyticsController extends Controller
             $filter_type = 'Marks';
             // Sorting Descending by Average
             usort($u, function ($a, $b) {
-                return $b['average'] - $a['average'];
+                return $b['average_x10'] - $a['average_x10'];
             });
         }
         return response()->json([
             'data'     =>  $u,
             'user_count'     =>  sizeof($u),
             'filter_type' => $filter_type
+        ], 200);
+    }
+
+    public function kpiData()
+    {
+        $year = request()->year;
+        $kpi_CPP_count = 0;
+        $kpi_karco_tasks_count = 0;
+        $kpi_videotel_tasks_count = 0;
+        $total = 100;
+        $total_cpp = 20;
+
+        $kpi_CPP = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
+        $kpi_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed');
+        $kpi_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%');
+
+        if (request()->from_date && request()->to_date) {
+            // If Date Filter
+            $from_date = request()->from_date;
+            $to_date = request()->to_date;
+            $from_month = Carbon::parse($from_date)->format('m');
+            $to_month =  Carbon::parse($to_date)->format('m');
+
+            $final_month = ($to_month - $from_month) + 1;
+        } else {
+            // Period Filter
+            $period = request()->period;
+            $from_date = Carbon::now()->subDays($period);
+            $to_date = Carbon::now();
+            $from_month = Carbon::parse($from_date)->format('m');
+            $to_month =  Carbon::parse($to_date)->format('m');
+
+            $final_month = ($to_month - $from_month);
+        }
+        // return 'from_date -'.$from_date. ' - to_date'. $to_date;
+        $kpi_CPP = $kpi_CPP->whereBetween('completion_date', [$from_date, $to_date]);
+        $kpi_karco_tasks = $kpi_karco_tasks->whereBetween('done_on', [$from_date, $to_date]);
+        $kpi_videotel_tasks = $kpi_videotel_tasks->whereBetween('date', [$from_date, $to_date]);
+
+        $kpi_CPP = $kpi_CPP->get();
+        $kpi_karco_tasks = $kpi_karco_tasks->get();
+        $kpi_videotel_tasks = $kpi_videotel_tasks->get();
+        $kpi_CPP_count = $kpi_CPP->count();
+        $kpi_karco_tasks_count = $kpi_karco_tasks->sum('no_of_video_watched');
+        $kpi_videotel_tasks_count = $kpi_videotel_tasks->count();
+
+
+        // return $final_month;
+
+        $cpp = $total_cpp * $final_month;
+        $karco_videotel = $total * $final_month;
+
+        $CPP_percentage = ($kpi_CPP_count / $cpp) * $total;
+        $KARCO_percentage = ($kpi_karco_tasks_count / $karco_videotel) * $total;
+        $VIDEOTEL_percentage = ($kpi_videotel_tasks_count / $karco_videotel) * $total;
+
+        // return 'Cpp'.$CPP_percentage . 'kaco' . $KARCO_percentage . 'videotel' . $VIDEOTEL_percentage. 'Cpp'.$kpi_CPP_count . 'kaco' . $kpi_karco_tasks_count . 'videotel' . $kpi_videotel_tasks_count;
+
+        return response()->json([
+            'kpi_CPP_percentage'     =>  round($CPP_percentage),
+            'kpi_karco_tasks_percentage' => round($KARCO_percentage),
+            'kpi_videotel_tasks_percentage' => round($VIDEOTEL_percentage),
+            'kpi_CPP'     =>  $kpi_CPP_count,
+            'kpi_karco_tasks' => $kpi_karco_tasks_count,
+            'kpi_videotel_tasks' => $kpi_videotel_tasks_count,
+            'cpp_out_of' => $cpp,
+            'karco_videotel_out_of' => $karco_videotel,
+            'success' => true
         ], 200);
     }
 }

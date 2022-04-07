@@ -13,7 +13,13 @@ class Site extends Model
   public function users()
   {
     return $this->belongsToMany(User::class)
-      ->with('roles', 'sites', 'rank');
+      ->with('roles', 'sites', 'rank', 'user_program_posts');
+  }
+
+  public function user_Reports()
+  {
+    return $this->belongsToMany(User::class)
+      ->with('roles', 'sites', 'rank', 'user_programs', 'karco_tasks_report', 'user_program_tasks', 'videotel_tasks_report');
   }
 
   public function programs()
@@ -23,7 +29,7 @@ class Site extends Model
 
   public function program_posts()
   {
-    return $this->hasMany(ProgramPost::class);
+    return $this->hasMany(ProgramPost::class)->with('program_tasks');
   }
 
   public function user_programs()
@@ -77,5 +83,9 @@ class Site extends Model
   public function user_ships()
   {
     return $this->hasMany(UserShip::class)->with('ship', 'user');
+  }
+  public function user_i_tests()
+  {
+    return $this->hasMany(UserITest::class)->with('user');
   }
 }
