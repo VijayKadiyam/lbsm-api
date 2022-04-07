@@ -12,6 +12,7 @@ class UploadsController extends Controller
 {
   public function uploadUserImage(Request $request)
   {
+    
     $request->validate([
       'userid'        => 'required',
     ]);
@@ -103,7 +104,7 @@ class UploadsController extends Controller
       $file = $request->file('imagepath2');
       $name = $request->filename ?? 'imagepath2.';
       $name = $name . $file->getClientOriginalExtension();;
-      $imagePath2 = 'user-program-task/' .  $request->user_program_task_id . '/' . $name;
+      $imagePath2 = 'lbsm/user-program-task/' .  $request->user_program_task_id . '/' . $name;
       Storage::disk('s3')->put($imagePath2, file_get_contents($file), 'public');
 
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
@@ -116,7 +117,7 @@ class UploadsController extends Controller
       $file = $request->file('imagepath3');
       $name = $request->filename ?? 'imagepath3.';
       $name = $name . $file->getClientOriginalExtension();;
-      $imagePath3 = 'user-program-task/' .  $request->user_program_task_id . '/' . $name;
+      $imagePath3 = 'lbsm/user-program-task/' .  $request->user_program_task_id . '/' . $name;
       Storage::disk('s3')->put($imagePath3, file_get_contents($file), 'public');
 
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
@@ -130,7 +131,7 @@ class UploadsController extends Controller
       $file = $request->file('imagepath4');
       $name = $request->filename ?? 'imagepath4.';
       $name = $name . $file->getClientOriginalExtension();;
-      $imagePath4 = 'user-program-task/' .  $request->user_program_task_id . '/' . $name;
+      $imagePath4 = 'lbsm/user-program-task/' .  $request->user_program_task_id . '/' . $name;
       Storage::disk('s3')->put($imagePath4, file_get_contents($file), 'public');
 
       $userProgramTask = UserProgramTask::where('id', '=', request()->user_program_task_id)->first();
