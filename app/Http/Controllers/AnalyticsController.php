@@ -587,7 +587,7 @@ class AnalyticsController extends Controller
         $kpi_videotel_tasks_count = 0;
         $total = 100;
         $total_cpp = 20;
-
+        $period = "";
         $kpi_CPP = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         $kpi_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed');
         $kpi_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%');
@@ -596,19 +596,19 @@ class AnalyticsController extends Controller
             // If Date Filter
             $from_date = request()->from_date;
             $to_date = request()->to_date;
-            $from_month = Carbon::parse($from_date)->format('m');
-            $to_month =  Carbon::parse($to_date)->format('m');
-
-            $final_month = ($to_month - $from_month) + 1;
         } else {
             // Period Filter
             $period = request()->period;
-            $from_date = Carbon::now()->subDays($period);
-            $to_date = Carbon::now();
-            $from_month = Carbon::parse($from_date)->format('m');
-            $to_month =  Carbon::parse($to_date)->format('m');
-
-            $final_month = ($to_month - $from_month);
+            $from_date = Carbon::now()->subDays($period)->format("Y-m-d");
+            $to_date = Carbon::now()->format("Y-m-d");
+        }
+        $from_month = Carbon::createFromFormat('Y-m-d', $from_date);
+        $to_month =  Carbon::createFromFormat('Y-m-d', $to_date);
+        $diff = $from_month->diffInMonths($to_month);
+        if ($period && $period != 30 && $period != 180) {
+            $final_month = $diff;
+        } else {
+            $final_month = $diff + 1;
         }
         // return 'from_date -'.$from_date. ' - to_date'. $to_date;
         $kpi_CPP = $kpi_CPP->whereBetween('completion_date', [$from_date, $to_date]);
@@ -643,6 +643,10 @@ class AnalyticsController extends Controller
             'kpi_videotel_tasks' => $kpi_videotel_tasks_count,
             'cpp_out_of' => $cpp,
             'karco_videotel_out_of' => $karco_videotel,
+            'diff' => $diff,
+            'from_month' => $from_date,
+            'to_month' => $to_date,
+            'final_month' => $final_month,
             'success' => true
         ], 200);
     }
