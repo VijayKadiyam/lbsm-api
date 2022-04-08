@@ -49,7 +49,7 @@ class AnalyticsController extends Controller
             // $user_counts = User::whereYear('created_at', '=', request()->year)
             $user_counts = User::groupBy('rank')
                 ->select('rank', DB::raw('count(id) as userCount'))
-                ->where('active', '=', true)
+                // ->where('active', '=', true)
                 ->get();
 
             // $user_counts = request()->site->users()->with('rank')

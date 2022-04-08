@@ -21,26 +21,26 @@ class Program extends Model
     public function program_tasks()
     {
         return $this->hasMany(ProgramTask::class)
-            ->with('program','program_post')->where('active', '=', true);
+            ->with('program','program_post');
     }
     public function user_programs()
     {
-        return $this->hasMany(UserProgram::class)->where('active', '=', true);
+        return $this->hasMany(UserProgram::class);
     }
 
     public function user_program_posts()
     {
-        return $this->hasMany(UserProgramPost::class)->where('active', '=', true);
+        return $this->hasMany(UserProgramPost::class);
     }
     public function user_program_tasks()
     {
-        return $this->hasMany(UserProgramTask::class)->where('active', '=', true);
+        return $this->hasMany(UserProgramTask::class);
     }
 
     public function program_posts()
   {
     return $this->hasMany(ProgramPost::class)
-    ->with('post')->where('active', '=', true);
+    ->with('post');
   }
   
 
