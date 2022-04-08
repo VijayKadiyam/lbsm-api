@@ -88,9 +88,12 @@ class UserProgramTasksController extends Controller
         $total_pending_program_tasks = $final_total_pending_program_tasks;
         // return $user_program_tasks;
         // $count = $user_program_tasks->count();
-
+        $arrays=$user_program_tasks->toArray();
+        usort($arrays, function ($a, $b) {
+            return $a['program_task_id'] - $b['program_task_id'];
+        });
         return response()->json([
-            'data'     =>  $user_program_tasks,
+            'data'     =>  $arrays,
             'total_completed_task'     =>  $total_completed_task,
             'total_pending_task'     =>  $total_pending_task,
             'average_score'     =>  $average_score,
