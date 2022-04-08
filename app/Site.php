@@ -13,7 +13,7 @@ class Site extends Model
   public function users()
   {
     return $this->belongsToMany(User::class)
-      ->with('roles', 'sites', 'rank', 'user_program_posts');
+      ->with('roles', 'sites', 'rank', 'user_program_posts')->where('active', '=', true);
   }
 
   public function user_Reports()
@@ -24,40 +24,40 @@ class Site extends Model
 
   public function programs()
   {
-    return $this->hasMany(Program::class)->with('program_posts');
+    return $this->hasMany(Program::class)->with('program_posts')->where('active', '=', true);
   }
 
   public function program_posts()
   {
-    return $this->hasMany(ProgramPost::class)->with('program_tasks');
+    return $this->hasMany(ProgramPost::class)->with('program_tasks')->where('active', '=', true);
   }
 
   public function user_programs()
   {
     return $this->hasMany(UserProgram::class)
-      ->with('user', 'program');
+      ->with('user', 'program')->where('active', '=', true);
   }
 
   public function user_program_posts()
   {
     return $this->hasMany(UserProgramPost::class)
-      ->with('user', 'program', 'program_post');
+      ->with('user', 'program', 'program_post')->where('active', '=', true);
   }
 
   public function program_tasks()
   {
     return $this->hasMany(ProgramTask::class)
-      ->with('program', 'program_post');
+      ->with('program', 'program_post')->where('active', '=', true);
   }
 
   public function user_program_tasks()
   {
-    return $this->hasMany(UserProgramTask::class);
+    return $this->hasMany(UserProgramTask::class)->where('active', '=', true);
   }
 
   public function user_program_task_documents()
   {
-    return $this->hasMany(UserProgramTaskDocument::class);
+    return $this->hasMany(UserProgramTaskDocument::class)->where('active', '=', true);
   }
 
   public function values()

@@ -49,6 +49,7 @@ class AnalyticsController extends Controller
             // $user_counts = User::whereYear('created_at', '=', request()->year)
             $user_counts = User::groupBy('rank')
                 ->select('rank', DB::raw('count(id) as userCount'))
+                ->where('active', '=', true)
                 ->get();
 
             // $user_counts = request()->site->users()->with('rank')
@@ -122,7 +123,7 @@ class AnalyticsController extends Controller
             }
 
             // All User Of that Rank [For Total KARCO TASK & Videotel Task]
-            $ranked_users = User::where('rank_id', '=', $rank_id)->get();
+            $ranked_users = User::where('rank_id', '=', $rank_id)->where('active', '=', true)->get();
             foreach ($ranked_users as $key => $user) {
                 $user_ids[] = $user->id;
             }
