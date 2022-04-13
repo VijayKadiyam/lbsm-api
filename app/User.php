@@ -147,17 +147,17 @@ class User extends Authenticatable
 
   public function user_programs()
   {
-    return $this->hasMany(UserProgram::class)->with('program');
+    return $this->hasMany(UserProgram::class)->with('program')->where('active',true);;
   }
 
   public function user_program_posts()
   {
-    return $this->hasMany(UserProgramPost::class)->with('program_post.post');
+    return $this->hasMany(UserProgramPost::class)->with('program_post.post')->where('active',true);;
   }
 
   public function user_program_tasks()
   {
-    return $this->hasMany(UserProgramTask::class)->with('program_task', 'ship');
+    return $this->hasMany(UserProgramTask::class)->with('program_task', 'ship')->where('active',true);;
   }
 
   public function user_ships()

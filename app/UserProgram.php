@@ -10,6 +10,7 @@ class UserProgram extends Model
         'user_id',
         'program_id',
         'enrollment_date',
+        'active',
     ];
 
     public function site()
@@ -27,6 +28,6 @@ class UserProgram extends Model
     public function user_program_tasks()
     {
         return $this->hasMany(UserProgramTask::class)
-            ->with('user', 'program', 'program_task', 'user_program', 'ship');
+            ->with('user', 'program', 'program_task', 'user_program', 'ship')->where('active',true);
     }
 }
