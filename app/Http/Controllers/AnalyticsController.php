@@ -97,9 +97,9 @@ class AnalyticsController extends Controller
         $nov_count = 0;
         $dec_count = 0;
 
-        $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
-        $total_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed');
-        $total_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%');
+        $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true)->where('active', true);
+        $total_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed')->where('is_deleted', false);
+        $total_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%')->where('is_deleted', false);
 
         if (request()->ship) {
             $ships = explode(',', request()->ship);
@@ -109,6 +109,7 @@ class AnalyticsController extends Controller
         }
         if (request()->rank != null) {
             $user_program_ids = [];
+
             $rank_id = request()->rank;
             // Rank Wise All Program Post
             $AllProgramPost = ProgramPost::where('post_id', '=', $rank_id)->get();
@@ -496,7 +497,8 @@ class AnalyticsController extends Controller
         $year = request()->year;
         $type = request()->type;
         $total_task = request()->site->user_program_tasks()
-            ->where('is_completed', '=', true);
+            ->where('is_completed', '=', true)
+            ->where('active', '=', true);
         // $total_task = UserProgramTask::where('is_completed', '=', true);
         // $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
         if (request()->rank) {
@@ -589,9 +591,9 @@ class AnalyticsController extends Controller
         $total = 100;
         $total_cpp = 20;
         $period = "";
-        $kpi_CPP = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true);
-        $kpi_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed');
-        $kpi_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%');
+        $kpi_CPP = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true)->where('active', '=', true);
+        $kpi_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed')->where('is_deleted', '=', false);
+        $kpi_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%')->where('is_deleted', '=', false);
 
         if (request()->from_date && request()->to_date) {
             // If Date Filter
