@@ -19,6 +19,7 @@ class ProgramTask extends Model
         'time_required',
         'total_marks',
         'passing_marks',
+        'active',
     ];
 
     public function site()
