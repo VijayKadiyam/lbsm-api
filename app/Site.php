@@ -24,7 +24,7 @@ class Site extends Model
 
   public function programs()
   {
-    return $this->hasMany(Program::class)->with('program_posts');
+    return $this->hasMany(Program::class)->with('program_posts')->where('active', '=', true);
   }
 
   public function program_posts()
