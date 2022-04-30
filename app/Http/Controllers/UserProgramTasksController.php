@@ -41,9 +41,13 @@ class UserProgramTasksController extends Controller
         $user_program_tasks = $userProgram->user_program_tasks;
         $count = $user_program_tasks->count();
 
-        $Current_user_program_post = UserProgramPost::where('user_id', '=', $user_id)->latest()->first();
-        $program_post_id = $Current_user_program_post->program_post_id;
-        $count_program_tasks = ProgramTask::where('program_post_id', '=', $program_post_id)->get()->count();
+        // $Current_user_program_post = UserProgramPost::where('user_id', '=', $user_id)->latest()->first();
+        // $program_post_id = $Current_user_program_post->program_post_id;
+        // $count_program_tasks = ProgramTask::where('program_post_id', '=', $program_post_id)->get()->count();
+
+        $Current_user_program_post = request()->site->user_program_posts()->with('program_post')->where('user_id', '=', $user_id)->latest()->get();
+        $count_program_tasks = sizeof($Current_user_program_post) ? sizeof($Current_user_program_post[0]['program_post']['program_tasks']) : 0;
+        // return $count_program_posts;
 
         $user_ships = $user_ships = request()->site->user_ships()
             ->where('user_id', '=', $user_id)->get();
@@ -88,7 +92,7 @@ class UserProgramTasksController extends Controller
         $total_pending_program_tasks = $final_total_pending_program_tasks;
         // return $user_program_tasks;
         // $count = $user_program_tasks->count();
-        $arrays=$user_program_tasks->toArray();
+        $arrays = $user_program_tasks->toArray();
         usort($arrays, function ($a, $b) {
             return $a['program_task_id'] - $b['program_task_id'];
         });
