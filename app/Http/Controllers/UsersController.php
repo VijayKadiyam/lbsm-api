@@ -166,8 +166,11 @@ class UsersController extends Controller
       });
 
     $users = $users->latest()->get();
-    $kpi_cpp_tasks = UserProgramTask::with('ship', 'program_task')->where('is_completed', '=', true)
+    $completed_tasks = request()->site->user_program_posts()->with('program_post')->where('user_id', '=', request()->user_id)->latest()->get();
+    $All_program_tasks = $completed_tasks[0]['program_post']['program_tasks'];
+    $kpi_cpp_tasks = UserProgramTask::with('ship', 'program_task')->where('is_completed', true)
       ->where('user_id', request()->user_id);
+
     $kpi_karco_tasks = KarcoTask::with('ship')->where('assessment_status', '=', 'Completed')
       ->where('user_id', request()->user_id);
     $kpi_videotel_tasks = VideotelTask::with('ship')->where('score', '=', '100%')
@@ -185,6 +188,43 @@ class UsersController extends Controller
 
     $kpi_videotel_tasks = $kpi_videotel_tasks->get();
     $users[0]['videotel_tasks'] = $kpi_videotel_tasks;
+
+    $completed_ppt = [];
+    foreach ($kpi_cpp_tasks as $key => $value) {
+      // return $value;
+      if ($value->active == true) {
+        if ($value->is_completed == 1) {
+          $completed_ppt[] = $value->program_task_id;
+        }
+      }
+    }
+    $pending_program_task = [];
+    foreach ($All_program_tasks as $key => $pt) {
+      $task_id = $pt->id;
+      if (!in_array($task_id, $completed_ppt)) {
+        $pending_program_task[] = $pt;
+      }
+    }
+
+    $users[0]['pending_program_task'] = $pending_program_task;
+    $pending_user_program_task_arrays = $users[0]['pending_program_task'];
+    // return $pending_user_program_task_arrays;
+    usort($pending_user_program_task_arrays, function ($a, $b) {
+      return $a['program_task_id'] - $b['program_task_id'];
+    });
+
+    $users[0]['cpp_tasks'] = $kpi_cpp_tasks->toArray();
+    $user_program_task_arrays = $users[0]['cpp_tasks'];
+    usort($user_program_task_arrays, function ($c, $d) {
+      return $c['program_task_id'] - $d['program_task_id'];
+    });
+    // return $user_program_task_arrays;
+
+    $users[0]['pending_user_program_task'] = $pending_user_program_task_arrays;
+    $users[0]['cpp_tasks'] = $user_program_task_arrays;
+    // return $pending_program_task;
+
+
 
     return response()->json([
       'data'  =>  $users
