@@ -46,9 +46,8 @@ class UserProgramTasksController extends Controller
         // $count_program_tasks = ProgramTask::where('program_post_id', '=', $program_post_id)->get()->count();
 
         $Current_user_program_post = request()->site->user_program_posts()->with('program_post')->where('user_id', '=', $user_id)->latest()->get();
-        $count_program_tasks = sizeof($Current_user_program_post) ? sizeof($Current_user_program_post[0]['program_post']['program_tasks']) : 0;
-        // return $count_program_posts;
 
+        $count_program_tasks = sizeof($Current_user_program_post) ? sizeof($Current_user_program_post[0]['program_post']['program_tasks']) : 0;
         $user_ships = $user_ships = request()->site->user_ships()
             ->where('user_id', '=', $user_id)->get();
 
@@ -62,34 +61,42 @@ class UserProgramTasksController extends Controller
         $Final_average_score = 0;
         $final_total_marks_obtained = 0;
         $final_total_pending_program_tasks = 0;
+        // return $user_program_tasks;
+        $completed_ppt = [];
         foreach ($user_program_tasks as $key => $value) {
-            // return $value;
-            // $count_is_completed = $value->is_completed;
-            if ($value->is_completed == 1) {
-                $total_completed_task += $value->is_completed;
-                $final_total_completed_task = $total_completed_task;
-            } else {
-                $pending_task = 1;
-                $total_pending_task += $pending_task;
-                $final_total_pending_task = $total_pending_task;
+            // return $value;e
+            if ($value->active == true) {
+                if ($value->is_completed == 1) {
+                    $completed_ppt[] = $value->program_task_id;
+                    $total_completed_task += $value->is_completed;
+                    $final_total_completed_task = $total_completed_task;
+                } else {
+                    $pending_task = 1;
+                    $total_pending_task += $pending_task;
+                    $final_total_pending_task = $total_pending_task;
+                }
+                $total_marks_obtained += $value->marks_obtained;
+                $final_total_marks_obtained = $total_marks_obtained;
+                $average_score = $total_marks_obtained / $count;
+                $Final_average_score = $average_score;
+                $final_total_pending_program_tasks = $count_program_tasks - $final_total_completed_task;
             }
-            $total_marks_obtained += $value->marks_obtained;
-            $final_total_marks_obtained = $total_marks_obtained;
-
-            $average_score = $total_marks_obtained / $count;
-            // $average_score = $total_marks_obtained / $total_completed_task;
-            $Final_average_score = $average_score;
-
-            $final_total_pending_program_tasks = $count_program_tasks - $final_total_completed_task;
-
-            // $user_program_tasks[] = $user_program_tasks;
         }
-
+        $All_program_tasks = $Current_user_program_post[0]['program_post']['program_tasks'];
+        $pending_program_task = [];
+        // return $completed_ppt;
+        foreach ($All_program_tasks as $key => $pt) {
+            $task_id = $pt->id;
+            if (!in_array($task_id, $completed_ppt)) {
+                $pending_program_task[] = $pt;
+            }
+        }
         $total_completed_task = $final_total_completed_task;
         $total_pending_task = $final_total_pending_task;
         $average_score = $Final_average_score;
         $total_marks_obtained = $final_total_marks_obtained;
-        $total_pending_program_tasks = $final_total_pending_program_tasks;
+        // $total_pending_program_tasks = $final_total_pending_program_tasks;
+        $total_pending_program_tasks = sizeof($pending_program_task);
         // return $user_program_tasks;
         // $count = $user_program_tasks->count();
         $arrays = $user_program_tasks->toArray();
@@ -105,6 +112,7 @@ class UserProgramTasksController extends Controller
             'total_pending_program_tasks'     =>  $total_pending_program_tasks,
             'count'    =>   $count,
             'user_ships' => $user_ships,
+            'pending_program_task' => $pending_program_task,
         ], 200);
     }
 
