@@ -119,3 +119,6 @@ Route::resource('user_ships', 'UserShipsController');
 
 // User I Test
 Route::resource('user_i_tests', 'UserITestsController');
+
+// Dump Program Task
+Route::resource('dump_program_tasks', 'DumpProgramTasksController');
