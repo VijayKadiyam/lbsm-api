@@ -35,13 +35,13 @@ class Site extends Model
   public function user_programs()
   {
     return $this->hasMany(UserProgram::class)
-      ->with('user', 'program')->where('active',true);;
+      ->with('user', 'program')->where('active', true);;
   }
 
   public function user_program_posts()
   {
     return $this->hasMany(UserProgramPost::class)
-      ->with('user', 'program', 'program_post')->where('active',true);;
+      ->with('user', 'program', 'program_post')->where('active', true);;
   }
 
   public function program_tasks()
@@ -52,7 +52,7 @@ class Site extends Model
 
   public function user_program_tasks()
   {
-    return $this->hasMany(UserProgramTask::class)->where('active',true);;
+    return $this->hasMany(UserProgramTask::class)->where('active', true);;
   }
 
   public function user_program_task_documents()
@@ -87,5 +87,9 @@ class Site extends Model
   public function user_i_tests()
   {
     return $this->hasMany(UserITest::class)->with('user');
+  }
+  public function dump_program_tasks()
+  {
+    return $this->hasMany(DumpProgramTask::class)->where('active', true);;
   }
 }
