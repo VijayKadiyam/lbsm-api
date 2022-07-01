@@ -33,7 +33,8 @@ class CreateDumpProgramTasksTable extends Migration
             $table->integer('active')->default(true);
             $table->string('remark')->nullable();
             $table->string('subject')->nullable();
-            $table->string('body')->nullable();
+            $table->longText('body')->nullable();
+            $table->string('message_id')->nullable();
             $table->timestamps();
         });
     }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\DumpProgramTask;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Webklex\IMAP\Facades\Client;
 
 class DumpProgramTasksController extends Controller
 {
@@ -77,5 +79,72 @@ class DumpProgramTasksController extends Controller
         return response()->json([
             'message' =>  'Deleted'
         ], 204);
+    }
+
+    public function imapInbox()
+    {
+        /** @var \Webklex\PHPIMAP\Client $client */
+        $client = Client::account('default');
+
+        //Connect to the IMAP Server
+        $client->connect();
+
+        //Get all Mailboxes
+        /** @var \Webklex\PHPIMAP\Support\FolderCollection $folders */
+        $folders = $client->getFolders();
+
+        //Loop through every Mailbox
+        /** @var \Webklex\PHPIMAP\Folder $folder */
+        foreach ($folders as $folder) {
+
+            //Get all Messages of the current Mailbox $folder
+            /** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
+            $messages = $folder->messages()->all()->get();
+            // return $messages;
+            /** @var \Webklex\PHPIMAP\Message $message */
+            foreach ($messages as $message) {
+                $message->getAttachments()->each(function ($oAttachment) use ($message) {
+                    $check_email_existing = request()->site->dump_program_tasks()
+                        ->where('message_id', $message->getMessageId())
+                        ->first();
+                    // return $check_email_existing;
+                    if (!$check_email_existing) {
+                        // return 1;
+                        $path = 'attachments/' . $message->getMessageId() . '/' . $oAttachment->name;
+                        Storage::disk('local')->put($path, $oAttachment->content, 'public');
+
+                        $data = [
+                            'subject' => $message->getSubject(),
+                            'body' => $message->getHTMLBody(),
+                            'imagepath1' => $path,
+                            'message_id' => $message->getMessageId(),
+
+                        ];
+                        // return $data;
+
+                        $dump_program_task = new DumpProgramTask($data);
+                        request()->site->dump_program_tasks()->save($dump_program_task);
+                    }
+                });
+
+
+
+                // return $dump_program_task->toArray();
+                // echo $message->getSubject() . '<br />';
+                // echo 'Attachments: ' . $message->getAttachments()->count() . '<br />';
+                // echo $message->getHTMLBody();
+                // echo "<br>";
+                // echo "<br>";
+                // echo "------------------------------------------------------------------------------------------";
+                // echo "<br>";
+                // echo "<br>";
+                //Move the current Message to 'INBOX.read'
+                // if ($message->move('INBOX.read') == true) {
+                //     echo 'Message has ben moved';
+                // } else {
+                //     echo 'Message could not be moved';
+                // }
+            }
+        }
     }
 }

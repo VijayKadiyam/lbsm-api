@@ -26,6 +26,7 @@ class DumpProgramTask extends Model
         'remark',
         'subject',
         'body',
+        'message_id',
     ];
     public function site()
     {

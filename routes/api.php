@@ -121,4 +121,5 @@ Route::resource('user_ships', 'UserShipsController');
 Route::resource('user_i_tests', 'UserITestsController');
 
 // Dump Program Task
+Route::get('dump_program_tasks/emails', 'DumpProgramTasksController@imapInbox');
 Route::resource('dump_program_tasks', 'DumpProgramTasksController');
