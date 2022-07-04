@@ -9,6 +9,7 @@ use App\UserProgramPost;
 use App\UserProgramTask;
 use App\Value;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserProgramTasksController extends Controller
 {
@@ -123,12 +124,24 @@ class UserProgramTasksController extends Controller
      */
     public function store(Request $request, UserProgram $userProgram)
     {
+        // return request()->all();
         $request->validate([
             'program_id'        =>  'required',
         ]);
 
         $userprogramTask = new UserProgramTask(request()->all());
         $userProgram->user_program_tasks()->save($userprogramTask);
+        $user_program_task_id = $userprogramTask->id;
+
+        if (request()->attachment) {
+            $file_name = request()->attachment;
+            $test = explode('/', $file_name);
+            $name =  end($test);
+            $new_path = 'lbsm/user-program-task/' .  $user_program_task_id . '/' . $name;
+            Storage::move(request()->attachment, $new_path);
+
+            $userprogramTask->update(['imagepath1' => $new_path]);
+        }
 
         return response()->json([
             'data'    =>  $userprogramTask

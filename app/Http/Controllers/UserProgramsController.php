@@ -30,7 +30,7 @@ class UserProgramsController extends Controller
         $count = 0;
         if ($request->search) {
             $user_programs = request()->site->user_programs()
-                ->where('user_id', '=' , $request->search)
+                ->where('user_id', '=', $request->search)
                 ->get();
             $count = $user_programs->count();
         } else if (request()->page && request()->rowsPerPage) {
@@ -38,10 +38,17 @@ class UserProgramsController extends Controller
             $count = $user_programs->count();
             $user_programs = $user_programs->paginate(request()->rowsPerPage)->toArray();
             $user_programs = $user_programs['data'];
+        } else if ($request->user_id) {
+            // return $request->user_id;
+            $user_programs = request()->site->user_programs()
+                ->where('user_id', '=', $request->user_id)
+                ->get();
+            $count = $user_programs->count();
         } else {
             $user_programs = request()->site->user_programs;
             $count = $user_programs->count();
         }
+        // return $user_programs;
 
         return response()->json([
             'data'     =>  $user_programs,
@@ -75,8 +82,8 @@ class UserProgramsController extends Controller
      */
     public function show(UserProgram $userProgram)
     {
-        $userProgram->user=$userProgram->user;
-        $userProgram->program=$userProgram->program;
+        $userProgram->user = $userProgram->user;
+        $userProgram->program = $userProgram->program;
         return response()->json([
             'data'   =>  $userProgram,
             'success' =>  true
