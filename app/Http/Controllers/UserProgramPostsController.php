@@ -76,7 +76,6 @@ class UserProgramPostsController extends Controller
         if ($UserprogramPosts == 0) {
             $userProgramPost = new UserProgramPost(request()->all());
             $request->site->user_program_posts()->save($userProgramPost);
-            
         } else {
             $msg = "User Program Post Already Added.";
         }
