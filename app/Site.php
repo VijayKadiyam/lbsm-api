@@ -90,6 +90,6 @@ class Site extends Model
   }
   public function dump_program_tasks()
   {
-    return $this->hasMany(DumpProgramTask::class)->where('active', true);;
+    return $this->hasMany(DumpProgramTask::class)->with('user')->where('active', true);;
   }
 }
