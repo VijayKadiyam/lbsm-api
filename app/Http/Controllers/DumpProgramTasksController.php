@@ -83,6 +83,9 @@ class DumpProgramTasksController extends Controller
 
     public function imapInbox()
     {
+        ini_set('max_execution_time', 0);
+        ini_set("memory_limit", "-1");
+        set_time_limit(0);
         /** @var \Webklex\PHPIMAP\Client $client */
         $client = Client::account('default');
 
