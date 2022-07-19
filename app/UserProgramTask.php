@@ -24,6 +24,7 @@ class UserProgramTask extends Model
         'active',
         'to_date',
         'remark',
+        'added_by_id',
     ];
     public function site()
     {
@@ -48,5 +49,9 @@ class UserProgramTask extends Model
     public function ship()
     {
         return $this->belongsTo(ValueList::class);
+    }
+    public function added_by()
+    {
+        return $this->belongsTo(user::class, 'added_by_id')->with('roles');
     }
 }

@@ -46,6 +46,7 @@ class UserProgramTasksController extends Controller
         // $program_post_id = $Current_user_program_post->program_post_id;
         // $count_program_tasks = ProgramTask::where('program_post_id', '=', $program_post_id)->get()->count();
 
+
         $Current_user_program_post = request()->site->user_program_posts()->with('program_post')->where('user_id', '=', $user_id)->latest()->get();
 
         $count_program_tasks = sizeof($Current_user_program_post) ? sizeof($Current_user_program_post[0]['program_post']['program_tasks']) : 0;
@@ -199,5 +200,23 @@ class UserProgramTasksController extends Controller
         return response()->json([
             'message' =>  'Deleted'
         ], 204);
+    }
+    public function userProgramUsers()
+    {
+        if (request()->search) {
+            ini_set('max_execution_time', 0);
+            ini_set("memory_limit", "-1");
+            set_time_limit(0);
+            $user_program_tasks_users = request()->site->user_program_tasks()
+                ->where('ship_id', '=', request()->search)
+                ->get();
+            $count = $user_program_tasks_users->count();
+            // return $user_program_tasks_users;
+        }
+        // return $UserProgramTask;
+        return response()->json([
+            'data'   =>  $user_program_tasks_users,
+            'success' =>  true
+        ], 200);
     }
 }
