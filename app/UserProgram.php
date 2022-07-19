@@ -28,6 +28,6 @@ class UserProgram extends Model
     public function user_program_tasks()
     {
         return $this->hasMany(UserProgramTask::class)
-            ->with('user', 'program', 'program_task', 'user_program', 'ship')->where('active',true);
+            ->with('user', 'program', 'program_task', 'user_program', 'ship', 'added_by')->where('active', true);
     }
 }
