@@ -52,7 +52,7 @@ class Site extends Model
 
   public function user_program_tasks()
   {
-    return $this->hasMany(UserProgramTask::class)->with('user', 'program', 'ship', 'added_by')->where('active', true);;
+    return $this->hasMany(UserProgramTask::class)->with('user', 'program', 'added_by')->where('active', true);;
   }
 
   public function user_program_task_documents()

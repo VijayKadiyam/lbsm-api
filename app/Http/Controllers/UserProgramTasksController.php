@@ -207,13 +207,13 @@ class UserProgramTasksController extends Controller
             ini_set('max_execution_time', 0);
             ini_set("memory_limit", "-1");
             set_time_limit(0);
-            $user_program_tasks_users = request()->site->user_program_tasks()
+            $user_program_tasks_users = request()->site->user_ships()
                 ->where('ship_id', '=', request()->search)
+                ->orderBy('to_date', 'DESC')
                 ->get();
+
             $count = $user_program_tasks_users->count();
-            // return $user_program_tasks_users;
         }
-        // return $UserProgramTask;
         return response()->json([
             'data'   =>  $user_program_tasks_users,
             'success' =>  true
