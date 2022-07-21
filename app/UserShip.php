@@ -21,7 +21,7 @@ class UserShip extends Model
     
     public function user()
     {
-        return $this->belongsTo(User::class)->with('rank');
+        return $this->belongsTo(User::class)->with('rank','user_programs');
     }
 
     public function ship()
