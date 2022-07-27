@@ -209,7 +209,7 @@ class UserProgramTasksController extends Controller
             set_time_limit(0);
             $user_program_tasks_users = request()->site->user_ships()
                 ->where('ship_id', '=', request()->search)
-                ->orderBy('to_date', 'DESC')
+                ->orderBy('to_date', 'ASC')
                 ->get();
 
             $count = $user_program_tasks_users->count();
