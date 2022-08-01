@@ -50,6 +50,10 @@ class Site extends Model
       ->with('program', 'program_post');
   }
 
+  public function user_program_tasks_dashboard()
+  {
+    return $this->hasMany(UserProgramTask::class)->with('user')->where('active', true);;
+  }
   public function user_program_tasks()
   {
     return $this->hasMany(UserProgramTask::class)->with('user', 'program', 'added_by')->where('active', true);;
