@@ -46,10 +46,14 @@ class UserProgramTasksController extends Controller
         // $program_post_id = $Current_user_program_post->program_post_id;
         // $count_program_tasks = ProgramTask::where('program_post_id', '=', $program_post_id)->get()->count();
 
-
+        // $Current_user_program_post = [];
         $Current_user_program_post = request()->site->user_program_posts()->with('program_post')->where('user_id', '=', $user_id)->latest()->get();
 
-        $count_program_tasks = sizeof($Current_user_program_post) ? sizeof($Current_user_program_post[0]['program_post']['program_tasks']) : 0;
+        if ($Current_user_program_post) {
+            $count_program_tasks = sizeof($Current_user_program_post) ? sizeof($Current_user_program_post[0]['program_post']['program_tasks']) : 0;
+        }
+
+        // return $Current_user_program_post;
         $user_ships = $user_ships = request()->site->user_ships()
             ->where('user_id', '=', $user_id)->get();
 
@@ -84,15 +88,22 @@ class UserProgramTasksController extends Controller
                 $final_total_pending_program_tasks = $count_program_tasks - $final_total_completed_task;
             }
         }
-        $All_program_tasks = $Current_user_program_post[0]['program_post']['program_tasks'];
+        $All_program_tasks = [];
+        if (sizeof($Current_user_program_post) != 0) {
+            $All_program_tasks = $Current_user_program_post[0]['program_post']['program_tasks'];
+        }
+
         $pending_program_task = [];
         // return $completed_ppt;
-        foreach ($All_program_tasks as $key => $pt) {
-            $task_id = $pt->id;
-            if (!in_array($task_id, $completed_ppt)) {
-                $pending_program_task[] = $pt;
+        if ($All_program_tasks) {
+            foreach ($All_program_tasks as $key => $pt) {
+                $task_id = $pt->id;
+                if (!in_array($task_id, $completed_ppt)) {
+                    $pending_program_task[] = $pt;
+                }
             }
         }
+
         $total_completed_task = $final_total_completed_task;
         $total_pending_task = $final_total_pending_task;
         $average_score = $Final_average_score;
