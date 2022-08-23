@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DumpProgramTask;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Webklex\IMAP\Facades\Client;
@@ -85,6 +86,7 @@ class DumpProgramTasksController extends Controller
     {
         ini_set('max_execution_time', 0);
         ini_set("memory_limit", "-1");
+
         set_time_limit(0);
         /** @var \Webklex\PHPIMAP\Client $client */
         $client = Client::account('default');
@@ -95,18 +97,21 @@ class DumpProgramTasksController extends Controller
         //Get all Mailboxes
         /** @var \Webklex\PHPIMAP\Support\FolderCollection $folders */
         $folders = $client->getFolders();
-
+        // $previous_date = Carbon::now();
+        // day -1
+        $previous_date = Carbon::now()->subDays(1);
         //Loop through every Mailbox
         /** @var \Webklex\PHPIMAP\Folder $folder */
         foreach ($folders as $folder) {
 
             //Get all Messages of the current Mailbox $folder
             /** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-            $messages = $folder->messages()->all()->get();
+            $messages = $folder->messages()->since($previous_date)->get();
             // return $messages;
             /** @var \Webklex\PHPIMAP\Message $message */
             foreach ($messages as $message) {
                 $message->getAttachments()->each(function ($oAttachment) use ($message) {
+
                     $check_email_existing = request()->site->dump_program_tasks()
                         ->where('message_id', $message->getMessageId())
                         ->first();
@@ -129,24 +134,6 @@ class DumpProgramTasksController extends Controller
                         request()->site->dump_program_tasks()->save($dump_program_task);
                     }
                 });
-
-
-
-                // return $dump_program_task->toArray();
-                // echo $message->getSubject() . '<br />';
-                // echo 'Attachments: ' . $message->getAttachments()->count() . '<br />';
-                // echo $message->getHTMLBody();
-                // echo "<br>";
-                // echo "<br>";
-                // echo "------------------------------------------------------------------------------------------";
-                // echo "<br>";
-                // echo "<br>";
-                //Move the current Message to 'INBOX.read'
-                // if ($message->move('INBOX.read') == true) {
-                //     echo 'Message has ben moved';
-                // } else {
-                //     echo 'Message could not be moved';
-                // }
             }
         }
     }
