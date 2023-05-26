@@ -122,6 +122,7 @@ Route::resource('user_i_tests', 'UserITestsController');
 
 // Dump Program Task
 Route::get('dump_program_tasks/emails', 'DumpProgramTasksController@imapInbox');
+Route::get('dump_program_tasks/assign/{id}', 'DumpProgramTasksController@autoAssign');
 Route::resource('dump_program_tasks', 'DumpProgramTasksController');
 
 //  Get from user program tasks

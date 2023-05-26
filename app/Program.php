@@ -12,6 +12,7 @@ class Program extends Model
         'instructor',
         'hours',
         'active',
+        'short_name',
     ];
 
     public function site()
@@ -22,7 +23,7 @@ class Program extends Model
     public function program_tasks()
     {
         return $this->hasMany(ProgramTask::class)
-            ->with('program','program_post')->where('active', '=', true);
+            ->with('program', 'program_post')->where('active', '=', true);
     }
     public function user_programs()
     {
@@ -39,15 +40,15 @@ class Program extends Model
     }
 
     public function program_posts()
-  {
-    return $this->hasMany(ProgramPost::class)
-    ->with('post');
-  }
-  
+    {
+        return $this->hasMany(ProgramPost::class)
+            ->with('post');
+    }
 
-  public function active_program_posts()
-  {
-    return $this->hasMany(ProgramPost::class)
-      ->where('is_active', '=', 1);
-  }
+
+    public function active_program_posts()
+    {
+        return $this->hasMany(ProgramPost::class)
+            ->where('is_active', '=', 1);
+    }
 }

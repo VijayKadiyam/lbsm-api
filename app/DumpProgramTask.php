@@ -27,6 +27,7 @@ class DumpProgramTask extends Model
         'subject',
         'body',
         'message_id',
+        'is_assign',
     ];
     public function site()
     {
