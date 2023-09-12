@@ -94,7 +94,6 @@ class DumpProgramTasksController extends Controller
     {
         ini_set('max_execution_time', 0);
         ini_set("memory_limit", "-1");
-
         set_time_limit(0);
         /** @var \Webklex\PHPIMAP\Client $client */
         $client = Client::account('default');
@@ -170,6 +169,15 @@ class DumpProgramTasksController extends Controller
         $shipId = null;
         $userProgramId = null;
 
+        // Get user from our database by user unique id (DANOS ID)
+        $user = User::where('unique_id', $user)->first();
+        // Check user exist or not
+        if ($user) {
+            $userId = $user->id;
+        } else {
+            $msg = 'Provided danos id of user not exist in our database.';
+        }
+
         // Get User program from databse
         $userProgram = UserProgram::where(['user_id' => $userId, 'program_id' => $programId])->first();
         if ($userProgram) {
@@ -193,17 +201,10 @@ class DumpProgramTasksController extends Controller
                     $msg = 'Provided serial no is not linked with ' . $programShortName . '.';
                 }
             } else {
-                $msg = 'Provided serail no of task not exist in our database.';
+                $msg = 'Provided serial no of task not exist in our database.';
             }
 
-            // Get user from our database by user unique id (DANOS ID)
-            $user = User::where('unique_id', $user)->first();
-            // Check user exist or not
-            if ($user) {
-                $userId = $user->id;
-            } else {
-                $msg = 'Provided danos id of user not exist in our database.';
-            }
+
 
             // Get Ship from database 
             $shipValue = Value::where('name', 'SHIPS')->where('site_id', '=', request()->site->id)->first();
@@ -236,25 +237,25 @@ class DumpProgramTasksController extends Controller
                 Storage::move($dumpAttachment, $new_path);
 
                 $userprogramTask->update(['imagepath1' => $new_path]);
-            }
 
-            if ($userprogramTask) {
-                $dumpPayloadUpdate = [
-                    'site_id' => request()->site->id,
-                    'ship_id' => $shipId,
-                    'program_id' => $programId,
-                    'program_task_id' => $taskId,
-                    'user_id' => $userId,
-                    'added_by_id' => Auth::user()->id,
-                    'user_program_id' => $userProgramId,
-                    'attachment' => $explodeBySlash[2],
-                    'is_assign' => true
-                ];
+                if ($userprogramTask) {
+                    $dumpPayloadUpdate = [
+                        'site_id' => request()->site->id,
+                        'ship_id' => $shipId,
+                        'program_id' => $programId,
+                        'program_task_id' => $taskId,
+                        'user_id' => $userId,
+                        'added_by_id' => Auth::user()->id,
+                        'user_program_id' => $userProgramId,
+                        'attachment' => $explodeBySlash[2],
+                        'is_assign' => true
+                    ];
 
-                $dump_program_task = DumpProgramTask::where('id', $dumpId)->first();
-                $dump_program_task->update($dumpPayloadUpdate);
-            } else {
-                $msg = 'Provided data not exist in our database. Kindly request you to perform assign task to user manually.';
+                    $dump_program_task = DumpProgramTask::where('id', $dumpId)->first();
+                    $dump_program_task->update($dumpPayloadUpdate);
+                } else {
+                    $msg = 'Provided data not exist in our database. Kindly request you to perform assign task to user manually.';
+                }
             }
         } else {
             $dump_program_task = '';
