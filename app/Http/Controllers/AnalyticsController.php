@@ -506,7 +506,13 @@ class AnalyticsController extends Controller
                 $q->where('active', '=', true);
             });
         }
+        if (request()->year) {
+            $year = request()->year;
+            $total_task = $total_task->whereYear('completion_date', '=', $year)
+                ->where('active', '=', true);
+        }
         $total_task = $total_task->get();
+        // return $total_task;
         // Array Alignment 
         $users = [];
         foreach ($total_task as $key => $task) {
