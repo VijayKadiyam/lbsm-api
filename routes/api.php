@@ -127,3 +127,6 @@ Route::resource('dump_program_tasks', 'DumpProgramTasksController');
 
 //  Get from user program tasks
 Route::get('user_program_task_users', 'UserProgramTasksController@userProgramUsers');
+
+// Same User Data Migration
+Route::get('same_user_data_migrations', 'AnalyticsController@same_user_data_migrations');

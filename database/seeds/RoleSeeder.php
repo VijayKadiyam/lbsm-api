@@ -27,12 +27,13 @@ class RoleSeeder extends Seeder
       'User',
       'Candidate',
       'Master',
+      'Acting Admin',
     ];
     foreach ($Role_array as $name) {
-      $state = Role::where('name', '=', $name)
+      $role = Role::where('name', '=', $name)
         ->first();
-      if ($state == '' || $state == null) {
-        $state = Role::create([
+      if ($role == '' || $role == null) {
+        $role = Role::create([
           'name'   =>  $name,
         ]);
       }

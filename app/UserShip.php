@@ -12,16 +12,17 @@ class UserShip extends Model
         'ship_id',
         'from_date',
         'to_date',
+        'active',
     ];
 
     public function site()
     {
         return $this->belongsTo(Site::class);
     }
-    
+
     public function user()
     {
-        return $this->belongsTo(User::class)->with('rank','user_programs');
+        return $this->belongsTo(User::class)->with('rank', 'user_programs');
     }
 
     public function ship()
