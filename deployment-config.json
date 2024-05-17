@@ -1,0 +1,18 @@
+[
+    {
+        "name": "server-1",
+        "ip": "139.59.50.244",
+        "username": "root",
+        "password": "L>4VCIM9Efey!ceC",
+        "port": "22",
+        "beforeHooks": "echo $RELEASE_PATH",
+        "afterHooks": "",
+        "path": "/var/www/lbsm/lbsm-api",
+        "virtualHostFilePath": "/etc/apache2/sites-available",
+        "virtualHostFile": "lbsm-api.conf",
+        "serverName": "api.lbsm.aaibuzz.com",
+        "serverAlias": "",
+        "serverAdmin": "kvjkumr@gmail.com",
+        "refreshVirtualHost": false
+    }
+]
