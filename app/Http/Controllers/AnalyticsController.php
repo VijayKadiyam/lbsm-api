@@ -98,13 +98,13 @@ class AnalyticsController extends Controller
         $dec_count = 0;
 
         $total_task = UserProgramTask::whereYear('completion_date', '=', $year)->where('is_completed', '=', true)->where('active', true);
-        $total_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed')->where('is_deleted', false);
+        // $total_karco_tasks = KarcoTask::whereYear('done_on', '=', $year)->where('assessment_status', '=', 'Completed')->where('is_deleted', false);
         $total_videotel_tasks = VideotelTask::whereYear('date', '=', $year)->where('score', '=', '100%')->where('is_deleted', false);
 
         if (request()->ship) {
             $ships = explode(',', request()->ship);
             $total_task = $total_task->whereIn('ship_id', $ships);
-            $total_karco_tasks = $total_karco_tasks->whereIn('ship_id', $ships);
+            // $total_karco_tasks = $total_karco_tasks->whereIn('ship_id', $ships);
             $total_videotel_tasks = $total_videotel_tasks->whereIn('ship_id', $ships);
         }
         if (request()->rank != null) {
@@ -130,11 +130,11 @@ class AnalyticsController extends Controller
             }
 
             $total_task = $total_task->whereIn('user_program_id', $user_program_ids);
-            $total_karco_tasks = $total_karco_tasks->whereIn('user_id', $user_ids);
+            // $total_karco_tasks = $total_karco_tasks->whereIn('user_id', $user_ids);
             $total_videotel_tasks = $total_videotel_tasks->whereIn('user_id', $user_ids);
         }
         $total_task = $total_task->get();
-        $total_karco_tasks = $total_karco_tasks->get();
+        // $total_karco_tasks = $total_karco_tasks->get();
         // return $total_karco_tasks->count();
         $total_videotel_tasks = $total_videotel_tasks->get();
 
@@ -183,64 +183,64 @@ class AnalyticsController extends Controller
                     break;
             }
         }
-        $total_no_of_video_watched_in_jan = 0;
-        $total_no_of_video_watched_in_feb = 0;
-        $total_no_of_video_watched_in_march = 0;
-        $total_no_of_video_watched_in_apr = 0;
-        $total_no_of_video_watched_in_may = 0;
-        $total_no_of_video_watched_in_june = 0;
-        $total_no_of_video_watched_in_july = 0;
-        $total_no_of_video_watched_in_aug = 0;
-        $total_no_of_video_watched_in_sept = 0;
-        $total_no_of_video_watched_in_oct = 0;
-        $total_no_of_video_watched_in_nov = 0;
-        $total_no_of_video_watched_in_dec = 0;
-        foreach ($total_karco_tasks as $key => $karco_task) {
-            $task_month = Carbon::parse($karco_task['done_on'])->month;
-            $video_watched = $karco_task->no_of_video_watched;
-            switch ($task_month) {
-                case '1':
-                    $total_no_of_video_watched_in_jan += $video_watched;
-                    break;
-                case '2':
-                    $total_no_of_video_watched_in_feb += $video_watched;
-                    break;
-                case '3':
-                    $total_no_of_video_watched_in_march += $video_watched;
-                    break;
-                case '4':
-                    $total_no_of_video_watched_in_apr += $video_watched;
-                    break;
-                case '5':
-                    $total_no_of_video_watched_in_may += $video_watched;
-                    break;
-                case '6':
-                    $total_no_of_video_watched_in_june += $video_watched;
-                    break;
-                case '7':
-                    $total_no_of_video_watched_in_july += $video_watched;
-                    break;
-                case '8':
-                    $total_no_of_video_watched_in_aug += $video_watched;
-                    break;
-                case '9':
-                    $total_no_of_video_watched_in_sept += $video_watched;
-                    break;
-                case '10':
-                    $total_no_of_video_watched_in_oct += $video_watched;
-                    break;
-                case '11':
-                    $total_no_of_video_watched_in_nov += $video_watched;
-                    break;
-                case '12':
-                    $total_no_of_video_watched_in_dec += $video_watched;
-                    break;
+        // $total_no_of_video_watched_in_jan = 0;
+        // $total_no_of_video_watched_in_feb = 0;
+        // $total_no_of_video_watched_in_march = 0;
+        // $total_no_of_video_watched_in_apr = 0;
+        // $total_no_of_video_watched_in_may = 0;
+        // $total_no_of_video_watched_in_june = 0;
+        // $total_no_of_video_watched_in_july = 0;
+        // $total_no_of_video_watched_in_aug = 0;
+        // $total_no_of_video_watched_in_sept = 0;
+        // $total_no_of_video_watched_in_oct = 0;
+        // $total_no_of_video_watched_in_nov = 0;
+        // $total_no_of_video_watched_in_dec = 0;
+        // foreach ($total_karco_tasks as $key => $karco_task) {
+        //     $task_month = Carbon::parse($karco_task['done_on'])->month;
+        //     $video_watched = $karco_task->no_of_video_watched;
+        //     switch ($task_month) {
+        //         case '1':
+        //             $total_no_of_video_watched_in_jan += $video_watched;
+        //             break;
+        //         case '2':
+        //             $total_no_of_video_watched_in_feb += $video_watched;
+        //             break;
+        //         case '3':
+        //             $total_no_of_video_watched_in_march += $video_watched;
+        //             break;
+        //         case '4':
+        //             $total_no_of_video_watched_in_apr += $video_watched;
+        //             break;
+        //         case '5':
+        //             $total_no_of_video_watched_in_may += $video_watched;
+        //             break;
+        //         case '6':
+        //             $total_no_of_video_watched_in_june += $video_watched;
+        //             break;
+        //         case '7':
+        //             $total_no_of_video_watched_in_july += $video_watched;
+        //             break;
+        //         case '8':
+        //             $total_no_of_video_watched_in_aug += $video_watched;
+        //             break;
+        //         case '9':
+        //             $total_no_of_video_watched_in_sept += $video_watched;
+        //             break;
+        //         case '10':
+        //             $total_no_of_video_watched_in_oct += $video_watched;
+        //             break;
+        //         case '11':
+        //             $total_no_of_video_watched_in_nov += $video_watched;
+        //             break;
+        //         case '12':
+        //             $total_no_of_video_watched_in_dec += $video_watched;
+        //             break;
 
-                default:
-                    # code...
-                    break;
-            }
-        }
+        //         default:
+        //             # code...
+        //             break;
+        //     }
+        // }
         $total_videotel_task_in_jan = 0;
         $total_videotel_task_in_feb = 0;
         $total_videotel_task_in_march = 0;
@@ -328,20 +328,20 @@ class AnalyticsController extends Controller
             $nov_count,
             $dec_count,
         ];
-        $total_karco_tasks_performed = [
-            $total_no_of_video_watched_in_jan,
-            $total_no_of_video_watched_in_feb,
-            $total_no_of_video_watched_in_march,
-            $total_no_of_video_watched_in_apr,
-            $total_no_of_video_watched_in_may,
-            $total_no_of_video_watched_in_june,
-            $total_no_of_video_watched_in_july,
-            $total_no_of_video_watched_in_aug,
-            $total_no_of_video_watched_in_sept,
-            $total_no_of_video_watched_in_oct,
-            $total_no_of_video_watched_in_nov,
-            $total_no_of_video_watched_in_dec,
-        ];
+        // $total_karco_tasks_performed = [
+        //     $total_no_of_video_watched_in_jan,
+        //     $total_no_of_video_watched_in_feb,
+        //     $total_no_of_video_watched_in_march,
+        //     $total_no_of_video_watched_in_apr,
+        //     $total_no_of_video_watched_in_may,
+        //     $total_no_of_video_watched_in_june,
+        //     $total_no_of_video_watched_in_july,
+        //     $total_no_of_video_watched_in_aug,
+        //     $total_no_of_video_watched_in_sept,
+        //     $total_no_of_video_watched_in_oct,
+        //     $total_no_of_video_watched_in_nov,
+        //     $total_no_of_video_watched_in_dec,
+        // ];
         $total_videotel_tasks_performed = [
             $total_videotel_task_in_jan,
             $total_videotel_task_in_feb,
@@ -358,7 +358,7 @@ class AnalyticsController extends Controller
         ];
         return response()->json([
             'data'     =>  $total_tasks_performed,
-            'total_karco_tasks_performed' => $total_karco_tasks_performed,
+            // 'total_karco_tasks_performed' => $total_karco_tasks_performed,
             'total_videotel_tasks_performed' => $total_videotel_tasks_performed,
             'success' => true
         ], 200);
@@ -637,6 +637,80 @@ class AnalyticsController extends Controller
             'from_month' => $from_date,
             'to_month' => $to_date,
             'final_month' => $final_month,
+            'success' => true
+        ], 200);
+    }
+
+
+    public function same_user_data_migrations()
+    {
+        $selectedUserMigrationFrom = explode(',', request()->selectedUserMigrationFrom);  // Selected user(s) for inactive status [2, 3]
+        $selectedUserForMigrationTo = request()->selectedUserMigrationTo; // Selected user for data migration
+        $dbTables = [
+            ['name' => 'user_programs', 'id' => 'program_id'],
+            ['name' => 'user_program_posts', 'id' => 'program_post_id'],
+            ['name' => 'user_program_tasks', 'id' => 'program_task_id'],
+            ['name' => 'user_ships', 'id' => 'ship_id'],
+            ['name' => 'videotel_tasks', 'id' => 'user_id'],
+        ]; // Array of database tables for migration
+
+        // Get migration data
+        $migrationToUserData = [];
+        $migrationUserFromData = [];
+
+        $migrationToUserData['user_programs'] = DB::table('user_programs')
+            ->where('user_id', $selectedUserForMigrationTo)
+            ->get();
+        $migrationToUserData['user_program_posts'] = DB::table('user_program_posts')
+            ->where('user_id', $selectedUserForMigrationTo)
+            ->get();
+        $migrationToUserData['user_program_tasks'] = DB::table('user_program_tasks')
+            ->where('user_id', $selectedUserForMigrationTo)
+            ->get();
+        $migrationToUserData['user_ships'] = DB::table('user_ships')
+            ->where('user_id', $selectedUserForMigrationTo)
+            ->get();
+        $migrationToUserData['videotel_tasks'] = DB::table('videotel_tasks')
+            ->where('user_id', $selectedUserForMigrationTo)
+            ->get();
+
+        // Loop through each selected user for inactivity
+        foreach ($selectedUserMigrationFrom as $userId) {
+            // Get user data
+            foreach ($dbTables as $table) {
+                $tableName = $table['name'];
+                $tableId = $table['id'];
+                $migrationUserFromData[$tableName] = DB::table($tableName)
+                    ->where('user_id', $userId)
+                    ->get();
+                if ($migrationToUserData[$tableName]->isNotEmpty() && $migrationUserFromData[$tableName]->isNotEmpty()) {
+                    if ($migrationToUserData[$tableName]->isNotEmpty() &&  $migrationUserFromData[$tableName]->isEmpty()) {
+                        DB::table('users')->where('id', $userId)
+                            ->update(['active' => false]);
+                    }
+                    if ($migrationUserFromData[$tableName]->isNotEmpty() && $migrationToUserData[$tableName]->isEmpty()) {
+                        DB::table($tableName)->where('user_id', $userId)
+                            ->update(['user_id' => $selectedUserForMigrationTo]);
+                    }
+                    if ($migrationUserFromData[$tableName]->$tableId == $migrationToUserData[$tableName]->$tableId) {
+                        // Deactivate the user's record
+                        DB::table($tableName)->where($tableId, $migrationUserFromData[$tableName]->$tableId)
+                            ->where('user_id', $userId)
+                            ->update(['active' => false]);
+                    } else {
+                        DB::table($tableName)->where('user_id', $userId)
+                            ->update(['user_id' => $selectedUserForMigrationTo]);
+                    }
+                    DB::table('users')->where('id', $userId)
+                        ->update(['active' => false]);
+                } else {
+                    DB::table('users')->where('id', $userId)
+                        ->update(['active' => false]);
+                }
+            }
+        }
+
+        return response()->json([
             'success' => true
         ], 200);
     }

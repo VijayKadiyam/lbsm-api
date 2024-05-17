@@ -11,6 +11,7 @@ class UserITest extends Model
         'date',
         'percentage',
         'status',
+        'active',
     ];
 
     public function site()

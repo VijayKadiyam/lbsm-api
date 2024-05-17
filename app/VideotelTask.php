@@ -17,6 +17,7 @@ class VideotelTask extends Model
         'duration',
         'score',
         'is_deleted',
+        'active',
     ];
 
     public function site()

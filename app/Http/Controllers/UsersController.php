@@ -55,11 +55,18 @@ class UsersController extends Controller
         $q->where('name', '!=', 'Admin');
         $q->where('name', '!=', 'Main Admin');
       })->latest()->get();
-    // if ($request->search == 'all')
-    //   $users = $request->site->users()->with('roles')
-    //     ->whereHas('roles',  function ($q) {
-    //       $q->where('name', '!=', 'Admin');
-    //     })->latest()->get();
+    if ($request->search) {
+      $users = $request->site->users()->with('roles')
+        ->whereHas('roles',  function ($q) {
+          $q->where('name', '!=', 'Admin');
+        })
+        ->where('first_name', 'LIKE', '%' . $request->search . '%')
+        ->orWhere('middle_name', 'LIKE', '%' . $request->search . '%')
+        ->orWhere('last_name', 'LIKE', '%' . $request->search . '%')
+        ->orWhere('user_name', 'LIKE', '%' . $request->search . '%')
+        ->Where('active', true)
+        ->latest()->get();
+    }
     // else if ($request->role_id) {
     //   $role = Role::find($request->role_id);
     //   $users = $request->site->users()
