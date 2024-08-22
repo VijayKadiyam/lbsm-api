@@ -32,18 +32,23 @@ class UserProgramPostsController extends Controller
     public function index(Request $request)
     {
         $count = 0;
+        $user_program_posts = request()->site->user_program_posts();
         if ($request->search) {
-            $user_program_posts = request()->site->user_program_posts()
-                ->where('user_id', 'LIKE', '%' . $request->search . '%')
-                ->get();
-            $count = $user_program_posts->count();
-        } else if (request()->page && request()->rowsPerPage) {
+            $user_program_posts = $user_program_posts->where('user_id', 'LIKE', '%' . $request->search . '%');
+        }
+        if ($request->user_id) {
+            $user_program_posts = $user_program_posts->where('user_id',  $request->user_id);
+        }
+        if ($request->program_id) {
+            $user_program_posts = $user_program_posts->where('program_id',  $request->program_id);
+        }
+        if (request()->page && request()->rowsPerPage) {
             $user_program_posts = request()->site->user_program_posts();
             $count = $user_program_posts->count();
             $user_program_posts = $user_program_posts->paginate(request()->rowsPerPage)->toArray();
             $user_program_posts = $user_program_posts['data'];
         } else {
-            $user_program_posts = request()->site->user_program_posts;
+            $user_program_posts = $user_program_posts->get();
             $count = $user_program_posts->count();
         }
 

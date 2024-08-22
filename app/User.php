@@ -41,7 +41,8 @@ class User extends Authenticatable
    * @var array
    */
   protected $hidden = [
-    'password', 'remember_token',
+    'password',
+    'remember_token',
   ];
 
   /*
@@ -187,5 +188,9 @@ class User extends Authenticatable
   public function videotel_tasks_report()
   {
     return $this->hasMany(VideotelTask::class)->where('score', '=', '100%')->with('ship');
+  }
+  public function user_rank_logs()
+  {
+    return $this->hasMany(UserRankLog::class)->with('rank');
   }
 }

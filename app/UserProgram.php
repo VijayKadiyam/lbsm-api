@@ -11,6 +11,7 @@ class UserProgram extends Model
         'program_id',
         'enrollment_date',
         'active',
+        'status',
     ];
 
     public function site()

@@ -28,27 +28,25 @@ class UserProgramsController extends Controller
     public function index(Request $request)
     {
         $count = 0;
+        $user_programs = request()->site->user_programs();
         if ($request->search) {
-            $user_programs = request()->site->user_programs()
-                ->where('user_id', '=', $request->search)
-                ->get();
-            $count = $user_programs->count();
-        } else if (request()->page && request()->rowsPerPage) {
-            $user_programs = request()->site->user_programs();
+            $user_programs = $user_programs->where('user_id', '=', $request->search);
+        }
+        if ($request->status != null || $request->status != "") {
+            $user_programs = $user_programs->where('status', '=', $request->status);
+        }
+        if ($request->user_id) {
+            $user_programs = $user_programs->where('user_id', '=', $request->user_id);
+        }
+        $user_programs = $user_programs->latest();
+        if (request()->page && request()->rowsPerPage) {
             $count = $user_programs->count();
             $user_programs = $user_programs->paginate(request()->rowsPerPage)->toArray();
             $user_programs = $user_programs['data'];
-        } else if ($request->user_id) {
-            // return $request->user_id;
-            $user_programs = request()->site->user_programs()
-                ->where('user_id', '=', $request->user_id)
-                ->get();
-            $count = $user_programs->count();
         } else {
-            $user_programs = request()->site->user_programs;
+            $user_programs = $user_programs->get();
             $count = $user_programs->count();
         }
-        // return $user_programs;
 
         return response()->json([
             'data'     =>  $user_programs,

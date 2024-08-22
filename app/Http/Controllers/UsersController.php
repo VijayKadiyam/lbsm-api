@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Role;
 use App\UserProgramTask;
+use App\UserRankLog;
 use App\Value;
 use App\VideotelTask;
 
@@ -110,7 +111,13 @@ class UsersController extends Controller
 
     $user->roles = $user->roles;
     $user->sites = $user->sites;
-
+    if ($user->rank_id) {
+      $user_rank = [
+        'rank_id' => $user->rank_id
+      ];
+      $rank = new UserRankLog($user_rank);
+      $user->user_rank_logs()->save($rank);
+    }
     return response()->json([
       'data'      =>  $user,
       'success'   =>  true
@@ -151,7 +158,21 @@ class UsersController extends Controller
 
     $user->roles = $user->roles;
     $user->sites = $user->sites;
-
+    // return $user->rank_id;
+    if (isset($user->rank_id)) {
+      $user_rank_logs = $user->user_rank_logs()
+        ->each(function ($log) {
+          $log->update([
+            'status' => false,
+          ]);
+        });
+      $user->user_rank_logs()->updateOrInsert([
+        'status' => true,
+        'user_id' => $user->id,
+        'rank_id' => $user->rank_id,
+        'site_id' => $user->sites[0]->id
+      ]);
+    }
     return response()->json([
       'data'  =>  $user,
       'success' =>  true
@@ -173,7 +194,10 @@ class UsersController extends Controller
       });
 
     $users = $users->latest()->get();
-    $completed_tasks = request()->site->user_program_posts()->with('program_post')->where('user_id', '=', request()->user_id)->latest()->get();
+    $completed_tasks = request()->site->user_program_posts()->with('program_post')
+      ->where('user_id', '=', request()->user_id)
+      ->where('program_post_id', '=', request()->program_post_id)
+      ->latest()->get();
     $All_program_tasks = $completed_tasks[0]['program_post']['program_tasks'];
     $kpi_cpp_tasks = UserProgramTask::with('ship', 'program_task')->where('is_completed', true)
       ->where('user_id', request()->user_id);

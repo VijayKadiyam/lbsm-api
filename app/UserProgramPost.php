@@ -13,6 +13,7 @@ class UserProgramPost extends Model
         'promotion_date',
         'active',
         'remarks',
+        'status'
     ];
 
     public function site()

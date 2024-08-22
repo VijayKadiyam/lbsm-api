@@ -678,11 +678,19 @@ class AnalyticsController extends Controller
         foreach ($selectedUserMigrationFrom as $userId) {
             // Get user data
             foreach ($dbTables as $table) {
+
                 $tableName = $table['name'];
                 $tableId = $table['id'];
                 $migrationUserFromData[$tableName] = DB::table($tableName)
                     ->where('user_id', $userId)
                     ->get();
+                $updateData = [
+                    'user_id' => $selectedUserForMigrationTo
+                ];
+                if (isset($migrationUserFromData[$tableName][0]->status)) {
+                    // Check if the Table has Status column to update. If 0 index will have it then rest all will have it as expected.
+                    $updateData['status'] = 2;
+                }
                 if ($migrationToUserData[$tableName]->isNotEmpty() && $migrationUserFromData[$tableName]->isNotEmpty()) {
                     if ($migrationToUserData[$tableName]->isNotEmpty() &&  $migrationUserFromData[$tableName]->isEmpty()) {
                         DB::table('users')->where('id', $userId)
@@ -690,16 +698,20 @@ class AnalyticsController extends Controller
                     }
                     if ($migrationUserFromData[$tableName]->isNotEmpty() && $migrationToUserData[$tableName]->isEmpty()) {
                         DB::table($tableName)->where('user_id', $userId)
-                            ->update(['user_id' => $selectedUserForMigrationTo]);
+                            ->update($updateData);
                     }
-                    if ($migrationUserFromData[$tableName]->$tableId == $migrationToUserData[$tableName]->$tableId) {
+                    if (
+                        isset($migrationUserFromData[$tableName]->$tableId)
+                        && isset($migrationToUserData[$tableName]->$tableId)
+                        && $migrationUserFromData[$tableName]->$tableId == $migrationToUserData[$tableName]->$tableId
+                    ) {
                         // Deactivate the user's record
                         DB::table($tableName)->where($tableId, $migrationUserFromData[$tableName]->$tableId)
                             ->where('user_id', $userId)
                             ->update(['active' => false]);
                     } else {
                         DB::table($tableName)->where('user_id', $userId)
-                            ->update(['user_id' => $selectedUserForMigrationTo]);
+                            ->update($updateData);
                     }
                     DB::table('users')->where('id', $userId)
                         ->update(['active' => false]);
